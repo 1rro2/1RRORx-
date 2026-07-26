@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>赵盟熙 · 数据驱动的全域营销 | 个人简历</title>
+  <meta name="description" content="赵盟熙 — 四川大学市场营销本科，数据驱动决策、全域营销增长。专注市场营销策划、运营增长、AI 应用与商务谈判。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%237fb8e4'/%3E%3Cstop offset='100%25' stop-color='%23b88f6a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='46' fill='url(%23g)' opacity='.92'/%3E%3Ccircle cx='50' cy='50' r='20' fill='%23fff' opacity='.9'/%3E%3C/svg%3E">
+
+  <!-- 首屏前读取主题，避免闪烁；URL 参数 ?theme=dark 可强制主题，方便分享/调试 -->
+  <script>
+    (function(){
+      var t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('zmx-theme') || 'light';
+      document.documentElement.dataset.theme = (t === 'dark') ? 'dark' : 'light';
+    })();
+  </script>
+
+  <!-- TailwindCSS -->
+  <script src="./assets/js/tailwindcss.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"PingFang SC"', '"Hiragino Sans GB"', '"Microsoft YaHei"', '"Noto Sans SC"', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="./assets/js/gsap.min.js"></script>
+  <script src="./assets/js/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ========== CSS 变量注册（支持主题切换时颜色平滑插值） ========== */
+    @property --ink        { syntax: '<color>'; inherits: true; initial-value: #e8f0f7; }
+    @property --ink-soft   { syntax: '<color>'; inherits: true; initial-value: rgba(232,240,247,0.72); }
+    @property --ink-faint  { syntax: '<color>'; inherits: true; initial-value: rgba(232,240,247,0.45); }
+    @property --accent     { syntax: '<color>'; inherits: true; initial-value: #7fb8e4; }
+    @property --accent-strong { syntax: '<color>'; inherits: true; initial-value: #a8d4f0; }
+    @property --surface    { syntax: '<color>'; inherits: true; initial-value: rgba(232,240,247,0.08); }
+    @property --surface-strong { syntax: '<color>'; inherits: true; initial-value: rgba(232,240,247,0.14); }
+    @property --surface-hi { syntax: '<color>'; inherits: true; initial-value: rgba(232,240,247,0.22); }
+    @property --halo       { syntax: '<color>'; inherits: true; initial-value: rgba(127,184,228,0.35); }
+    @property --page-tint  { syntax: '<color>'; inherits: true; initial-value: rgba(8,24,42,0.38); }
+
+    :root, [data-theme="light"] {
+      --ink: #e8f0f7;
+      --ink-soft: rgba(232,240,247,0.72);
+      --ink-faint: rgba(232,240,247,0.45);
+      --accent: #7fb8e4;
+      --accent-strong: #a8d4f0;
+      --deep: #0f3b64;
+      --mid: #2a6999;
+      --surface: rgba(232,240,247,0.09);
+      --surface-strong: rgba(232,240,247,0.15);
+      --surface-hi: rgba(232,240,247,0.24);
+      --halo: rgba(127,184,228,0.38);
+      --page-tint: rgba(4,14,26,0.42);
+    }
+    [data-theme="dark"] {
+      --ink: #e9e2d6;
+      --ink-soft: rgba(233,226,214,0.70);
+      --ink-faint: rgba(233,226,214,0.42);
+      --accent: #b88f6a;
+      --accent-strong: #d4af8a;
+      --deep: #121212;
+      --mid: #b88f6a;
+      --surface: rgba(184,143,106,0.10);
+      --surface-strong: rgba(184,143,106,0.17);
+      --surface-hi: rgba(212,175,138,0.26);
+      --halo: rgba(212,175,138,0.45);
+      --page-tint: rgba(0,0,0,0.48);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+      background: #050b14;
+      overflow-x: hidden;
+    }
+
+    /* 主题切换时的全局颜色过渡（仅切换瞬间启用，避免污染 hover） */
+    html.theming {
+      transition: --ink .9s ease, --ink-soft .9s ease, --ink-faint .9s ease,
+                  --accent .9s ease, --accent-strong .9s ease,
+                  --surface .9s ease, --surface-strong .9s ease, --surface-hi .9s ease,
+                  --halo .9s ease, --page-tint .9s ease;
+    }
+
+    /* ========== 去边缘化柔色块 ========== */
+    .fluid { position: relative; isolation: isolate; }
+    .fluid::before {
+      content: "";
+      position: absolute; inset: 0; z-index: 0;
+      border-radius: inherit;
+      background: var(--surface);
+      backdrop-filter: blur(16px) saturate(1.25);
+      -webkit-backdrop-filter: blur(16px) saturate(1.25);
+      -webkit-mask-image: radial-gradient(115% 115% at 50% 50%, #000 58%, transparent 100%);
+      mask-image: radial-gradient(115% 115% at 50% 50%, #000 58%, transparent 100%);
+      pointer-events: none;
+    }
+    .fluid > * { position: relative; z-index: 1; }
+    .fluid-soft::before {
+      -webkit-mask-image: radial-gradient(120% 120% at 50% 50%, #000 70%, transparent 100%);
+      mask-image: radial-gradient(120% 120% at 50% 50%, #000 70%, transparent 100%);
+    }
+    .fluid-strong::before { background: var(--surface-strong); }
+
+    /* ========== 固定背景层（视频优先 / 静态图兜底 / CSS 渐变兜底） ========== */
+    .bg-layer {
+      position: fixed; inset: -4% -7%; z-index: -2;
+      width: 114%; height: 108%;
+      background: #050b14;
+      overflow: hidden;
+      opacity: 1;
+      will-change: opacity, transform;
+    }
+    [data-theme="light"] #bgLayerLight,
+    [data-theme="dark"] #bgLayerDark { opacity: 1; }
+    #bgLayerLight { background: linear-gradient(180deg, #113c66 0%, #0a2644 45%, #030a14 100%); }
+    #bgLayerDark  { background: linear-gradient(180deg, #18120f 0%, #121212 50%, #0a0808 100%); }
+
+    .bg-media {
+      position: absolute; inset: -2% -5%; width: 110%; height: 110%;
+      object-fit: cover;
+      animation: bgDrift 90s ease-in-out infinite alternate;
+      opacity: 1 !important;
+    }
+    .bg-layer video.bg-media { z-index: 1; display: block; }
+    .bg-layer img.bg-fallback { z-index: 0; display: none; }
+    @keyframes bgDrift {
+      from { transform: translateX(-2.5%); }
+      to   { transform: translateX(2.5%); }
+    }
+    .bg-fallback { display: none; }
+
+    /* 背景色罩，让文字更清晰 */
+    #pageTint {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--page-tint) 70%);
+    }
+
+    /* ========== Hero 区 ========== */
+    #hero { min-height: 100vh; min-height: 100svh; position: relative; overflow: hidden; }
+
+    #avatarWrap {
+      position: absolute; left: 50%;
+      width: clamp(190px, 33.333vh, 420px); aspect-ratio: 1/1;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      transition: top 1s cubic-bezier(0.65, 0, 0.35, 1);
+      z-index: 1;
+      background: radial-gradient(circle at 40% 35%, var(--surface-hi) 0%, var(--surface-strong) 60%, var(--surface) 100%);
+      border-radius: 50%;
+    }
+    [data-theme="light"] #avatarWrap { top: 62%; }
+    [data-theme="dark"] #avatarWrap { top: 46%; }
+
+    .avatar-halo {
+      position: absolute; inset: -18%; border-radius: 50%; pointer-events: none;
+      background: radial-gradient(circle, var(--halo) 0%, transparent 62%);
+      filter: blur(10px);
+      opacity: 0; transition: opacity 1s ease;
+    }
+    [data-theme="dark"] .avatar-halo { opacity: 1; }
+
+    .avatar-img {
+      position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    #avatarLight {
+      -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 58%, transparent 72%);
+      mask-image: radial-gradient(circle at 50% 50%, #000 58%, transparent 72%);
+    }
+    [data-theme="light"] #avatarDark  { opacity: 0; transform: scale(0.94); }
+    [data-theme="dark"] #avatarLight { opacity: 0; transform: scale(0.94); }
+
+    #heroText {
+      position: absolute; left: 0; right: 0; text-align: center;
+      top: 10%; padding: 0 1rem;
+      transition: top 1s cubic-bezier(0.65, 0, 0.35, 1);
+      z-index: 2;
+    }
+    [data-theme="dark"] #heroText { top: 60%; }
+
+    .hero-name { font-size: clamp(2.6rem, 7vw, 5rem); font-weight: 700; letter-spacing: 0.04em; text-shadow: 0 4px 30px rgba(0,0,0,0.25); }
+    .hero-slogan { font-size: clamp(1.1rem, 2.6vw, 1.5rem); opacity: .86; margin-top: .6rem; }
+    .hero-tags { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-top: 1rem; }
+    .hero-tag {
+      padding: .35rem .9rem; border-radius: 999px;
+      font-size: .82rem; color: var(--ink-soft);
+      background: var(--surface); backdrop-filter: blur(8px);
+    }
+
+    /* Hero 区域总结介绍文字 */
+    .hero-summary {
+      max-width: 640px;
+      margin: .8rem auto 0;
+      font-size: clamp(.78rem, 1.4vw, .88rem);
+      line-height: 1.65;
+      color: var(--ink-soft);
+      padding: 0 1rem;
+    }
+
+    #scrollHint {
+      position: absolute; left: 50%; bottom: 2rem; transform: translateX(-50%);
+      color: var(--ink-soft); display: flex; flex-direction: column; align-items: center; gap: .25rem;
+      animation: bounce 2.2s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ========== 左侧固定导航栏（桌面端垂直 / 移动端底部水平） ========== */
+    #sideNav {
+      position: fixed;
+      z-index: 55;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .5s ease, visibility .5s ease;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    #sideNav.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      color: var(--ink-faint);
+      text-decoration: none;
+      background: transparent;
+      transition: color .3s, background .3s;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .nav-link:hover {
+      color: var(--ink-soft);
+      background: var(--surface);
+    }
+    .nav-link.active {
+      color: var(--accent-strong);
+      background: var(--surface-strong);
+    }
+    .nav-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ink-faint);
+      flex-shrink: 0;
+      transition: background .3s, transform .3s;
+    }
+    .nav-link.active .nav-dot {
+      background: var(--accent);
+      transform: scale(1.4);
+    }
+
+    /* ========== 主题切换按钮 ========== */
+    #themeToggle {
+      position: fixed; top: 1.25rem; right: 1.25rem; z-index: 60;
+      width: 3rem; height: 3rem; border-radius: 50%; border: 0;
+      cursor: pointer; display: grid; place-items: center;
+      color: var(--ink); background: transparent;
+    }
+    #themeToggle svg { grid-area: 1/1; transition: opacity .5s, transform .6s; }
+    .icon-sun { opacity: 1; transform: rotate(0deg); }
+    .icon-moon { opacity: 0; transform: rotate(-90deg); }
+    [data-theme="dark"] .icon-sun { opacity: 0; transform: rotate(90deg); }
+    [data-theme="dark"] .icon-moon { opacity: 1; transform: rotate(0deg); }
+
+    /* ========== 音频播放器 ========== */
+    #player { position: fixed; left: 1rem; bottom: 1rem; z-index: 55; }
+    @media (max-width: 768px) { #player { bottom: 4rem; } }
+    #playerFab {
+      width: 3.2rem; height: 3.2rem; border-radius: 50%; border: 0;
+      display: grid; place-items: center; cursor: pointer; color: var(--ink);
+      background: transparent; position: relative;
+    }
+    #playerFab .pulse-ring {
+      position: absolute; inset: 0; border-radius: 50%;
+      box-shadow: 0 0 0 0 var(--halo);
+      opacity: 0;
+    }
+    #playerFab.playing .pulse-ring { animation: pulseRing 2s ease-out infinite; }
+    @keyframes pulseRing {
+      0% { opacity: .6; box-shadow: 0 0 0 0 var(--halo); }
+      70% { opacity: 0; box-shadow: 0 0 0 14px transparent; }
+      100% { opacity: 0; }
+    }
+
+    #playerPanel {
+      position: absolute; bottom: calc(100% + .75rem); left: 0; width: 18rem;
+      border-radius: 1.5rem; padding: 1rem; opacity: 0; visibility: hidden;
+      transform: translateY(12px) scale(0.96); transform-origin: bottom left;
+      color: var(--ink);
+    }
+    #playerPanel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); transition: all .35s cubic-bezier(0.16,1,0.3,1); }
+    .pl-row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .6rem; }
+    .pl-title { font-weight: 600; font-size: .95rem; line-height: 1.25; }
+    .pl-meta { font-size: .7rem; color: var(--ink-faint); }
+    .pl-progress { height: 4px; border-radius: 2px; background: var(--surface-strong); cursor: pointer; overflow: hidden; margin: .6rem 0; }
+    .pl-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 2px; }
+    .pl-time { display: flex; justify-content: space-between; font-size: .65rem; color: var(--ink-faint); margin-top: -.25rem; margin-bottom: .6rem; }
+    .pl-controls { display: flex; align-items: center; justify-content: center; gap: .75rem; }
+    .pl-btn { background: transparent; border: 0; color: var(--ink); cursor: pointer; padding: .35rem; display: grid; place-items: center; border-radius: 50%; transition: transform .15s, color .2s; }
+    .pl-btn:hover { transform: scale(1.1); color: var(--accent-strong); }
+    .pl-btn svg { width: 1.15rem; height: 1.15rem; }
+    .pl-btn.pl-play svg { width: 1.55rem; height: 1.55rem; }
+
+    /* ========== 内容区公共 ========== */
+    .section-pad { padding: 6rem 0; }
+    .eyebrow { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem; }
+    .section-title { font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 700; margin-bottom: 2.5rem; }
+
+    /* ========== 个人介绍板块 ========== */
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .about-text {
+      font-size: clamp(0.88rem, 1.4vw, 0.95rem);
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+    .about-avatar-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .about-avatar-container {
+      width: clamp(180px, 22vw, 300px);
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      position: relative;
+      background: radial-gradient(circle at 40% 35%, var(--surface-hi) 0%, var(--surface-strong) 60%, var(--surface) 100%);
+    }
+    .about-avatar-halo {
+      position: absolute;
+      inset: -15%;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, var(--halo) 0%, transparent 62%);
+      filter: blur(12px);
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    [data-theme="dark"] .about-avatar-halo { opacity: 1; }
+    .about-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      transition: opacity .9s ease;
+    }
+
+
+    /* ========== 量化成果卡片悬浮效果 ========== */
+    .stat {
+      transition: transform .4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .4s ease, background .4s ease;
+      cursor: pointer;
+    }
+    .stat:hover {
+      transform: scale(1.04) translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+      background: var(--surface-hi) !important;
+    }
+    .stat:hover .stat-num { color: var(--accent-strong); }
+    .stat-num { transition: color .3s ease; }
+    /* ========== 数据概览 ========== */
+    .stat-num { font-size: clamp(2.4rem, 5.5vw, 3.8rem); font-weight: 700; line-height: 1; letter-spacing: -0.02em; }
+    .stat { transition: transform .35s ease, box-shadow .35s ease, background .35s ease; cursor: pointer; }
+    .stat:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 20px 50px rgba(0,0,0,0.25); background: var(--surface-strong); }
+    .stat-label { font-size: .95rem; margin-top: .75rem; color: var(--ink); }
+    .stat-sub  { font-size: .75rem; margin-top: .35rem; color: var(--ink-faint); }
+
+    /* ========== 图表卡片 ========== */
+    .chart-card { border-radius: 2rem; padding: 2rem; }
+    /* 让 canvas 100% 填充父容器，避免因缺少 CSS 宽高导致实际绘制区域偏小 */
+    .chart-card canvas { width: 100% !important; height: 100% !important; display: block; }
+    .chart-title { font-size: 1.1rem; font-weight: 600; margin-bottom: .25rem; }
+    .chart-desc { font-size: .75rem; color: var(--ink-soft); margin-bottom: .6rem; }
+
+    /* ========== 项目横向滚动 ========== */
+    #projects { position: relative; }
+    #projViewport { overflow-x: auto; }
+    #projViewport.pinned { overflow-x: visible; }
+    #projTrack { display: flex; gap: 1.75rem; padding: 0 1rem 2rem; }
+    .proj-card {
+      flex: 0 0 auto; width: min(82vw, 560px);
+      border-radius: 2rem; padding: 1.25rem;
+      scroll-snap-align: start;
+    }
+    .proj-visual { position: relative; border-radius: 1.5rem; overflow: hidden; aspect-ratio: 16/10; cursor: zoom-in; background: var(--surface); }
+    .proj-visual img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+    .proj-visual:hover img { transform: scale(1.04); }
+    .img-fallback {
+      position: absolute; inset: 0; display: grid; place-items: center;
+      background: radial-gradient(120% 120% at 30% 20%, var(--surface-hi), var(--surface) 60%);
+      color: var(--ink-faint); font-size: .8rem; text-align: center; padding: 1rem;
+    }
+    .proj-meta { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0 .6rem; }
+    .proj-tag { padding: .22rem .65rem; border-radius: 999px; font-size: .72rem; color: var(--ink-soft); background: var(--surface); }
+    .proj-metrics { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
+    .metric { padding: .35rem .7rem; border-radius: .75rem; font-size: .78rem; background: var(--surface-strong); color: var(--ink); }
+    .metric strong { color: var(--accent-strong); }
+
+    /* ========== 赛场与舞台（精简为 grid 两列布局） ========== */
+    .life-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .life-img-wrap { border-radius: 1.5rem; overflow: hidden; aspect-ratio: 4/3; position: relative; cursor: zoom-in; background: var(--surface); }
+    .life-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+    .life-img-wrap:hover img { transform: scale(1.04); }
+    .life-cap { margin-top: .6rem; font-size: .82rem; color: var(--ink-soft); }
+
+
+    /* ========== 营销理念卡片悬浮效果 ========== */
+    .phi-block {
+      transition: transform .4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .4s ease, background .4s ease;
+      cursor: pointer;
+    }
+    .phi-block:hover {
+      transform: scale(1.04) translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      background: var(--surface-hi) !important;
+    }
+    .phi-block:hover .phi-num {
+      transform: scale(1.15); opacity: .9;
+    }
+    .phi-block .phi-num {
+      transition: transform .4s ease, opacity .4s ease;
+    }
+    .phi-block:hover .phi-title {
+      color: var(--accent-strong);
+    }
+    .phi-block .phi-title {
+      transition: color .3s ease;
+    }
+    .phi-block:hover .phi-text {
+      color: var(--ink);
+    }
+    .phi-text {
+      transition: color .3s ease;
+    }
+
+    /* ========== 理念与经历 ========== */
+    .phi-block { border-radius: 2rem; padding: 1.6rem 2rem; margin-bottom: 1.5rem; transition: transform .35s ease, box-shadow .35s ease, background .35s ease; cursor: pointer; }
+    .phi-block:hover { transform: translateY(-5px) scale(1.01); box-shadow: 0 18px 45px rgba(0,0,0,0.2); background: var(--surface-strong); }
+    .phi-num { font-size: 2rem; font-weight: 700; color: var(--accent); opacity: .5; line-height: 1; margin-bottom: .4rem; transition: opacity .3s, transform .3s; }
+    .phi-block:hover .phi-num { opacity: 1; transform: scale(1.1); }
+    .phi-title { font-size: 1.15rem; font-weight: 600; margin-bottom: .35rem; }
+    .phi-text { font-size: .9rem; color: var(--ink-soft); line-height: 1.7; }
+
+
+    /* ========== 实习经历卡片优化 ========== */
+    .exp-card {
+      border-radius: 2rem; padding: 1.4rem 1.6rem; margin-bottom: 1.25rem;
+      transition: transform .4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .4s ease;
+      cursor: pointer;
+    }
+    .exp-card:hover {
+      transform: scale(1.025) translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+    }
+    .exp-card:hover .exp-role { color: var(--accent-strong); }
+    .exp-role {
+      font-size: 1.15rem; font-weight: 700; letter-spacing: 0.01em;
+      transition: color .3s ease;
+    }
+    .exp-company {
+      font-size: .85rem; color: var(--ink-soft); font-weight: 500; margin-top: .15rem;
+    }
+    .exp-period {
+      font-size: .78rem; font-weight: 600; letter-spacing: 0.03em; font-variant-numeric: tabular-nums;
+    }
+    .exp-list li {
+      font-size: .9rem; line-height: 1.75; margin-bottom: .45rem;
+    }
+
+    .exp-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; margin-bottom: .5rem; }
+    .exp-role { font-size: 1.05rem; font-weight: 600; }
+    .exp-company { font-size: .8rem; color: var(--ink-soft); }
+    .exp-period { font-size: .72rem; color: var(--accent-strong); padding: .25rem .7rem; border-radius: 999px; background: var(--surface); }
+    .exp-list { list-style: none; padding: 0; margin: .6rem 0 0; }
+    .exp-list li { position: relative; padding-left: 1rem; font-size: .85rem; color: var(--ink-soft); margin-bottom: .35rem; line-height: 1.6; }
+    .exp-list li::before { content: ""; position: absolute; left: 0; top: .55rem; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); opacity: .7; }
+
+    /* ========== 页脚 ========== */
+    footer .contact-row { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: center; margin-bottom: 1.25rem; }
+    footer .contact-item { display: inline-flex; align-items: center; gap: .45rem; font-size: .9rem; color: var(--ink-soft); text-decoration: none; transition: color .2s; }
+    footer .contact-item:hover { color: var(--accent-strong); }
+    .social-chip { display: inline-flex; align-items: center; gap: .35rem; padding: .35rem .8rem; border-radius: 999px; background: var(--surface); color: var(--ink-soft); font-size: .78rem; text-decoration: none; transition: background .2s, color .2s; }
+    .social-chip:hover { background: var(--surface-strong); color: var(--ink); }
+
+    /* ========== Lightbox 弹窗 ========== */
+    #lightbox { position: fixed; inset: 0; z-index: 90; display: none; place-items: center; }
+    #lbBackdrop { background: rgba(3,7,12,0.72); backdrop-filter: blur(18px); }
+    #lbFigure { position: relative; z-index: 1; max-width: 90vw; max-height: 85vh; display: flex; flex-direction: column; align-items: center; }
+    #lbImg { max-width: 100%; max-height: 78vh; border-radius: 1rem; box-shadow: 0 30px 80px rgba(0,0,0,0.45); object-fit: contain; }
+    #lbCap { margin-top: .75rem; font-size: .85rem; color: var(--ink-soft); text-align: center; max-width: 70vw; }
+    .lb-btn { position: absolute; z-index: 2; background: var(--surface-strong); border: 0; border-radius: 50%; width: 2.6rem; height: 2.6rem; display: grid; place-items: center; color: var(--ink); cursor: pointer; backdrop-filter: blur(8px); transition: transform .2s, background .2s; }
+    .lb-btn:hover { transform: scale(1.08); background: var(--surface-hi); }
+    .lb-close { top: 1rem; right: 1rem; }
+    .lb-prev { left: 1rem; top: 50%; transform: translateY(-50%); }
+    .lb-next { right: 1rem; top: 50%; transform: translateY(-50%); }
+    .lb-prev:hover, .lb-next:hover { transform: translateY(-50%) scale(1.08); }
+
+
+    /* ========== 左侧固定导航栏 ========== */
+    #sideNav {
+      position: fixed; left: 1rem; top: 50%; transform: translateY(-50%);
+      z-index: 55; display: flex; flex-direction: column; gap: .15rem;
+      padding: .6rem .55rem; border-radius: 0 1.2rem 1.2rem 0;
+      background: var(--surface); backdrop-filter: blur(18px) saturate(1.25);
+      -webkit-backdrop-filter: blur(18px) saturate(1.25);
+      opacity: 0; visibility: hidden;
+      transition: opacity .45s ease, visibility .45s ease;
+    }
+    #sideNav.visible { opacity: 1; visibility: visible; }
+    .nav-link {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .35rem .7rem; border-radius: .7rem;
+      font-size: .72rem; color: var(--ink-faint); text-decoration: none;
+      white-space: nowrap; cursor: pointer; border: 0; background: none;
+      transition: color .25s, background .25s;
+      font-family: inherit;
+    }
+    .nav-link:hover { color: var(--ink); background: var(--surface-strong); }
+    .nav-link.active { color: var(--accent-strong); background: var(--surface-hi); }
+    .nav-dot {
+      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+      background: var(--ink-faint); transition: background .25s, transform .25s;
+    }
+    .nav-link.active .nav-dot { background: var(--accent); transform: scale(1.5); }
+    @media (max-width: 768px) {
+      #sideNav {
+        left: 0; right: 0; top: auto; bottom: 0; transform: none;
+        flex-direction: row; border-radius: 1.2rem 1.2rem 0 0;
+        padding: .45rem .6rem; gap: .1rem;
+        overflow-x: auto; justify-content: center; max-width: 100vw;
+      }
+      .nav-link { padding: .3rem .45rem; font-size: .65rem; }
+      .nav-dot { display: none; }
+    }
+    /* ========== 个人介绍板块 ========== */
+    #about .about-grid {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 2.5rem; align-items: center;
+    }
+    #about .about-text { font-size: .92rem; line-height: 1.9; color: var(--ink-soft); }
+    #about .about-text strong { color: var(--accent-strong); font-weight: 600; }
+    #about .about-portrait {
+      width: clamp(160px, 20vw, 240px); aspect-ratio: 3/4;
+      border-radius: 2rem; overflow: hidden; position: relative;
+      background: var(--surface-strong);
+    }
+    #aboutAvatarDark { position: absolute; inset: 0; opacity: 0; transform: scale(0.94); }
+    [data-theme="dark"] #aboutAvatarLight { opacity: 0; transform: scale(0.94); }
+    [data-theme="dark"] #aboutAvatarDark { opacity: 1; transform: scale(1); }
+    #about .about-portrait img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    @media (max-width: 768px) {
+      #about .about-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      #about .about-portrait { width: 180px; order: -1; }
+    }
+    .life-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 560px; margin: 0 auto;
+    }
+    .life-grid .life-card { width: 100%; flex: none; }
+    @media (max-width: 640px) { .life-grid { grid-template-columns: 1fr; max-width: 360px; } }
+
+
+    /* ========== 项目无缝循环自动滚动 ========== */
+    #projViewport { scroll-behavior: smooth; overflow: hidden; }
+    #projTrack { display: flex; gap: 1.75rem; padding: 0 1rem 2rem; }
+    /* 隐藏滚动条：兼容所有主流浏览器 */
+    #projTrack::-webkit-scrollbar { display: none; }
+    #projTrack { scrollbar-width: none; -ms-overflow-style: none; }
+    #projTrack.seamless-scroll {
+      animation: projSeamless 35s linear infinite;
+    }
+    #projTrack.seamless-scroll:hover {
+      animation-play-state: paused;
+    }
+    @keyframes projSeamless {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    /* 项目详情弹窗 */
+    #projModal {
+      position: fixed; inset: 0; z-index: 85; display: none;
+      place-items: center; padding: 2rem;
+    }
+    #projModal.open { display: grid; }
+    #projModalBackdrop {
+      position: absolute; inset: 0;
+      background: rgba(3,7,12,0.75); backdrop-filter: blur(18px);
+    }
+    #projModalContent {
+      position: relative; z-index: 1; max-width: 600px; width: 100%;
+      max-height: 85vh; overflow-y: auto;
+      border-radius: 2rem; padding: 2rem;
+    }
+    .proj-modal-close {
+      position: absolute; top: 1rem; right: 1rem; z-index: 2;
+      width: 2.4rem; height: 2.4rem; border-radius: 50%; border: 0;
+      background: var(--surface-strong); color: var(--ink); cursor: pointer;
+      display: grid; place-items: center; backdrop-filter: blur(8px);
+    }
+    .proj-modal-img {
+      width: 100%; aspect-ratio: 16/10; object-fit: cover;
+      border-radius: 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    /* ========== Toast 提示 ========== */
+    #toast {
+      position: fixed; left: 50%; bottom: 5.5rem; transform: translateX(-50%); z-index: 80;
+      padding: .7rem 1.2rem; border-radius: 999px; opacity: 0; visibility: hidden;
+      font-size: .82rem; color: var(--ink); pointer-events: none;
+    }
+
+    /* ========== 减少动画偏好 ========== */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .bg-media { animation: none !important; }
+      *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+
+    /* 没有 GSAP 时直接显示全部内容 */
+    .no-gsap .reveal { opacity: 1 !important; transform: none !important; }
+
+    /* ========== 导航栏响应式：移动端底部水平排列 ========== */
+    @media (max-width: 768px) {
+      #sideNav {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        transform: none;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0;
+        padding: 0.4rem 0.5rem;
+        border-radius: 1rem 1rem 0 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
+      #sideNav::before {
+        content: "";
+        position: absolute; inset: 0;
+        background: var(--surface);
+        backdrop-filter: blur(16px) saturate(1.25);
+        -webkit-backdrop-filter: blur(16px) saturate(1.25);
+        border-radius: inherit;
+        z-index: -1;
+      }
+      .nav-link {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.68rem;
+        flex-shrink: 0;
+      }
+      .nav-dot { display: none; }
+      /* 移动端播放器上移，避免被底部导航遮挡 */
+      #player { bottom: 4rem; }
+    }
+
+    /* 响应式小修补 */
+    @media (max-width: 640px) {
+      #heroText { top: 10%; }
+      [data-theme="dark"] #heroText { top: 66%; }
+      [data-theme="light"] #avatarWrap { top: 64%; }
+      #avatarWrap { width: clamp(170px, 46vw, 260px); }
+      .about-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .about-avatar-wrap { order: -1; }
+      .life-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== 固定背景层：两套独立底图，切换时交叉淡入淡出 ========== -->
+  <!-- 素材位置：./assets/background/bg-light.mp4（视频优先） / 1.jpg（静态图兜底） -->
+  <div id="bgLayerLight" class="bg-layer" aria-hidden="true">
+    <video class="bg-media" autoplay muted loop playsinline preload="auto" poster="./assets/background/1.jpg">
+      <source src="./assets/background/bg-light.mp4" type="video/mp4">
+    </video>
+    <img class="bg-media bg-fallback" src="./assets/background/1.jpg" alt="">
+  </div>
+  <!-- 素材位置：./assets/background/bg-dark.mp4（视频优先） / 2.jpg（静态图兜底） -->
+  <div id="bgLayerDark" class="bg-layer" aria-hidden="true">
+    <video class="bg-media" autoplay muted loop playsinline preload="auto" poster="./assets/background/2.jpg">
+      <source src="./assets/background/bg-dark.mp4" type="video/mp4">
+    </video>
+    <img class="bg-media bg-fallback" src="./assets/background/2.jpg" alt="">
+  </div>
+  <div id="pageTint" aria-hidden="true"></div>
+
+  <!-- ========== 左侧固定导航栏（桌面端垂直 / 移动端底部水平） ========== -->
+  <nav id="sideNav" aria-label="页面导航">
+    <a class="nav-link active" href="#hero" data-section="hero"><span class="nav-dot"></span>首页</a>
+    <a class="nav-link" href="#about" data-section="about"><span class="nav-dot"></span>个人介绍</a>
+    <a class="nav-link" href="#stats" data-section="stats"><span class="nav-dot"></span>量化成果</a>
+    <a class="nav-link" href="#projects" data-section="projects"><span class="nav-dot"></span>项目作品</a>
+    <a class="nav-link" href="#philosophy" data-section="philosophy"><span class="nav-dot"></span>营销理念</a>
+    <a class="nav-link" href="#experience" data-section="experience"><span class="nav-dot"></span>实习经历</a>
+    <a class="nav-link" href="#life" data-section="life"><span class="nav-dot"></span>赛场舞台</a>
+    <a class="nav-link" href="#skills" data-section="skills"><span class="nav-dot"></span>专业能力</a>
+  </nav>
+
+  <!-- 右上角：双主题切换按钮 -->
+  <button type="button"  id="themeToggle" class="fluid fluid-soft" aria-label="切换主题" title="切换主题">
+    <svg class="icon-sun" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
+
+  <!-- 左下角：可收缩音频播放器 -->
+  <div id="player">
+    <div id="playerPanel" class="fluid">
+      <div class="pl-row">
+        <div>
+          <div id="plThemeLabel" class="pl-meta">SOS · 海洋歌单</div>
+          <div id="plTitle" class="pl-title">—</div>
+        </div>
+        <button type="button"  id="plCollapse" class="pl-btn" title="收起播放器" aria-label="收起播放器"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button>
+      </div>
+      <div id="plProgress" class="pl-progress"><div id="plFill" class="pl-fill"></div></div>
+      <div class="pl-time"><span id="plCurrent">0:00</span><span id="plDuration">0:00</span></div>
+      <div class="pl-controls">
+        <button type="button"  id="plPrev" class="pl-btn" title="上一首"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>
+        <button type="button"  id="plPlay" class="pl-btn pl-play" title="播放/暂停"><svg id="plPlayIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><svg id="plPauseIcon" style="display:none" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button>
+        <button type="button"  id="plNext" class="pl-btn" title="下一首"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg></button>
+        <button type="button"  id="plMute" class="pl-btn" title="静音开关"><svg id="plVolIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><svg id="plMuteIcon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></button>
+      </div>
+      <div id="plHint" class="pl-meta" style="margin-top:.5rem;text-align:center">默认静音，点击播放后仍可手动取消静音</div>
+    </div>
+    <button type="button"  id="playerFab" class="fluid" title="展开播放器" aria-label="展开播放器">
+      <span class="pulse-ring"></span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    </button>
+  </div>
+
+
+  <main>
+    <!-- ========== 1. Hero 首屏 100vh ========== -->
+    <section id="hero">
+      <!-- 头像区 -->
+      <div id="avatarWrap">
+        <div class="avatar-halo"></div>
+        <!-- 素材位置：./assets/avatar/avatar-light.png（光明主题头像） -->
+        <img id="avatarLight" class="avatar-img" src="./assets/avatar/avatar-light.png" alt="赵盟熙" onerror="this.style.display='none'">
+        <!-- 素材位置：./assets/avatar/avatar-dark.png（黑暗主题头像） -->
+        <img id="avatarDark" class="avatar-img" src="./assets/avatar/avatar-dark.png" alt="赵盟熙" onerror="this.style.display='none'">
+      </div>
+
+      <div id="heroText">
+        <p class="hero-eyebrow text-sm tracking-widest opacity-80 mb-2">四川大学 · 市场营销（A+）</p>
+        <h1 class="hero-name">赵盟熙</h1>
+        <div class="hero-tags">
+          <span class="hero-tag reveal">市场营销策划</span>
+          <span class="hero-tag reveal">运营增长</span>
+          <span class="hero-tag reveal">AI 应用</span>
+          <span class="hero-tag reveal">商务谈判</span>
+        </div>
+        <p class="hero-slogan reveal">数据驱动决策 · 全域营销增长</p>
+        <p class="hero-summary reveal" style="max-width:640px;margin:1.2rem auto 0;font-size:clamp(.82rem,1.5vw,.95rem);color:var(--ink-soft);line-height:1.75">四川大学市场营销专业在读，拥有京东、实习僧、歪马送酒等多段一线实习经历。擅长数据驱动决策与全域营销增长，熟练运用AI工具赋能商业分析。院篮球队队长、校主持队核心成员，兼具团队领导力与公众表达力。</p>
+      </div>
+
+      <div id="scrollHint">
+        <span style="font-size:.7rem;letter-spacing:.08em">SCROLL</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+      </div>
+    </section>
+
+    <!-- ========== 2. 个人介绍板块（左右两栏布局） ========== -->
+    <section id="about" class="section-pad">
+      <div class="max-w-6xl mx-auto px-6">
+        <p class="eyebrow reveal">ABOUT ME</p>
+        <h2 class="section-title reveal">个人介绍</h2>
+        <div class="about-layout reveal">
+          <!-- 左侧文字介绍 -->
+          <div class="about-text">
+            <p>赵盟熙，四川大学市场营销专业（A+评级）2023-2027在读。我是一名以数据驱动决策为核心竞争力的市场营销实践者。</p>
+            <p style="margin-top:1rem">在京东集团3C数码事业群的实习中，独立操盘618大促全链路运营，核心单品同比增长120%；在实习僧期间，从0到1搭建覆盖1500+学生的社群增长体系。</p>
+            <p style="margin-top:1rem">我坚信「全域营销增长」理念——打通直播、社群、投放与线下场景，构建从种草到转化的完整闭环。同时，我熟练运用Claude、Codex等AI工具重构数据分析与商业报告流程，是京东黑客马拉松获奖实践者。</p>
+            <p style="margin-top:1rem">赛场之外，我担任院篮球队队长与校主持队核心成员，累计主持3000+人规模活动5场，兼具团队领导力与公众表达力。</p>
+          </div>
+          <!-- 右侧头像照片（跟随主题切换） -->
+          <div class="about-avatar-wrap">
+            <div class="about-avatar-container">
+              <div class="about-avatar-halo"></div>
+              <!-- 素材位置：./assets/avatar/avatar-light.png（光明主题头像） -->
+              <img id="aboutAvatarLight" class="about-avatar-img" src="./assets/avatar/avatar-light.png" alt="赵盟熙头像" onerror="this.style.display='none'" style="z-index:1">
+              <!-- 素材位置：./assets/avatar/avatar-dark.png（黑暗主题头像） -->
+              <img id="aboutAvatarDark" class="about-avatar-img" src="./assets/avatar/avatar-dark.png" alt="赵盟熙头像" onerror="this.style.display='none'" style="z-index:2;opacity:0">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 3. 个人量化数据概览 ========== -->
+    <section id="stats" class="section-pad">
+      <div class="max-w-6xl mx-auto px-6">
+        <p class="eyebrow reveal">QUANTIFIED IMPACT</p>
+        <h2 class="section-title reveal">量化成果</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="stat fluid fluid-strong rounded-[2rem] px-6 py-10 text-center reveal">
+            <div class="stat-num" data-target="120" data-suffix="%">0</div>
+            <div class="stat-label">618 大促核心单品同比增长</div>
+            <div class="stat-sub">京东 · 3C 数码配件业务部</div>
+          </div>
+          <div class="stat fluid fluid-strong rounded-[2rem] px-6 py-10 text-center reveal">
+            <div class="stat-num" data-target="400" data-suffix="万+">0</div>
+            <div class="stat-label">4 个月直播累计 GMV</div>
+            <div class="stat-sub">转化率 CVR 稳定 3.5%+</div>
+          </div>
+          <div class="stat fluid fluid-strong rounded-[2rem] px-6 py-10 text-center reveal">
+            <div class="stat-num" data-target="2000" data-suffix="万+">0</div>
+            <div class="stat-label">众筹 AI 新品微博话题曝光</div>
+            <div class="stat-sub">Motvox 消音口罩 · 首日破 500 单</div>
+          </div>
+          <div class="stat fluid fluid-strong rounded-[2rem] px-6 py-10 text-center reveal">
+            <div class="stat-num" data-target="85" data-suffix="%">0</div>
+            <div class="stat-label">秋招社群留存率</div>
+            <div class="stat-sub">覆盖 1500+ 高校学生</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ========== 项目作品 ========== -->
+    <section id="projects" class="section-pad">
+      <div class="max-w-6xl mx-auto px-6 mb-8">
+        <p class="eyebrow reveal">SELECTED WORKS</p>
+        <h2 class="section-title reveal">项目作品</h2>
+      </div>
+      <div id="projViewport">
+        <div id="projTrack">
+          <!-- Project 1 -->
+          <article class="proj-card fluid">
+            <div class="proj-visual" data-lb="p1" data-idx="0" data-proj="p1">
+              <img src="./assets/projects/project-1-1.jpg" alt="京东 618 大促全链路操盘" onerror="this.style.display='none'">
+              <div class="img-fallback">项目封面待替换<br>./assets/projects/project-1-1.jpg</div>
+            </div>
+            <div class="proj-meta">
+              <span class="proj-tag">电商运营</span><span class="proj-tag">商务谈判</span><span class="proj-tag">AI 供应链</span>
+            </div>
+            <h3 class="text-xl font-semibold mb-1">京东 · 618 大促全链路操盘</h3>
+            <p class="text-sm opacity-70 mb-1">2026.03 – 2026.08 · 3C 数码事业群</p>
+            <div class="proj-metrics">
+              <span class="metric"><strong>+120%</strong> 核心单品同比</span>
+              <span class="metric"><strong>-12%</strong> 库存周转天数</span>
+              <span class="metric"><strong>+5%</strong> 类目利润同比</span>
+            </div>
+            <p class="text-sm text-[var(--ink-soft)] leading-relaxed">独立操盘自营及 POP 店铺全链路运营，主导合同谈判与毛保策略；618 大促期间以 AI 工具驱动货盘管理与供应链优化，决策效率提升 30%。</p>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="proj-card fluid">
+            <div class="proj-visual" data-lb="p2" data-idx="0" data-proj="p2">
+              <img src="./assets/projects/project-2-1.jpg" alt="京东众筹 101 AIdol" onerror="this.style.display='none'">
+              <div class="img-fallback">项目封面待替换<br>./assets/projects/project-2-1.jpg</div>
+            </div>
+            <img class="hidden" data-lb="p2" data-idx="1" src="./assets/projects/project-2-2.jpg" alt="京东众筹 101 AIdol" onerror="this.style.display='none'">
+            <div class="proj-meta">
+              <span class="proj-tag">新品孵化</span><span class="proj-tag">招商建联</span><span class="proj-tag">整合营销</span>
+            </div>
+            <h3 class="text-xl font-semibold mb-1">京东众筹「101 AIdol」· AI 硬件孵化</h3>
+            <p class="text-sm opacity-70 mb-1">2026 · AI 配件供应链壁垒</p>
+            <div class="proj-metrics">
+              <span class="metric"><strong>500+</strong> 首日订单</span>
+              <span class="metric"><strong>2000万+</strong> 微博话题曝光</span>
+              <span class="metric"><strong>20+</strong> 新商入驻自营</span>
+            </div>
+            <p class="text-sm text-[var(--ink-soft)] leading-relaxed">全权操盘京东众筹 AI 项目，孵化 Motvox 消音口罩；主动建联 100+ 新商，扩充品类新供给 25%，联动华为、荣耀、佳能绑赠，单月带动 2 万台销售。</p>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="proj-card fluid">
+            <div class="proj-visual" data-lb="p3" data-idx="0" data-proj="p3">
+              <img src="./assets/projects/project-3-1.jpg" alt="跨境抖店独立运营 泰国市场" onerror="this.style.display='none'">
+              <div class="img-fallback">项目封面待替换<br>./assets/projects/project-3-1.jpg</div>
+            </div>
+            <img class="hidden" data-lb="p3" data-idx="1" src="./assets/projects/project-3-2.jpg" alt="跨境抖店独立运营 泰国市场" onerror="this.style.display='none'">
+            <div class="proj-meta">
+              <span class="proj-tag">跨境电商</span><span class="proj-tag">千川投放</span><span class="proj-tag">选品策略</span>
+            </div>
+            <h3 class="text-xl font-semibold mb-1">跨境抖店独立运营 · 泰国市场</h3>
+            <p class="text-sm opacity-70 mb-1">2024.01 – 2024.12 · 国内/跨境抖店</p>
+            <div class="proj-metrics">
+              <span class="metric"><strong>+30%</strong> 日均订单量</span>
+              <span class="metric"><strong>+40%</strong> 销售额</span>
+              <span class="metric"><strong>-15%</strong> 转化成本</span>
+            </div>
+            <p class="text-sm text-[var(--ink-soft)] leading-relaxed">负责 120+ SKU 选品上架与主图详情页优化；巨量千川 A/B 测试提升投放效率 20%；基于 Shopee 大数据洞察消费趋势，结合大促节点策划营销。</p>
+          </article>
+
+          <!-- Project 4 -->
+          <article class="proj-card fluid">
+            <div class="proj-visual" data-lb="p4" data-idx="0" data-proj="p4">
+              <img src="./assets/projects/project-4-1.jpg" alt="五酿品牌营销策划" onerror="this.style.display='none'">
+              <div class="img-fallback">项目封面待替换<br>./assets/projects/project-4-1.jpg</div>
+            </div>
+            <img class="hidden" data-lb="p4" data-idx="1" src="./assets/projects/project-4-2.jpg" alt="五酿品牌营销策划" onerror="this.style.display='none'">
+            <div class="proj-meta">
+              <span class="proj-tag">市场调研</span><span class="proj-tag">品牌策略</span><span class="proj-tag">方案落地</span>
+            </div>
+            <h3 class="text-xl font-semibold mb-1">五酿品牌营销策划</h3>
+            <p class="text-sm opacity-70 mb-1">2025.09 – 2025.11</p>
+            <div class="proj-metrics">
+              <span class="metric"><strong>采纳落地</strong> 策划案</span>
+              <span class="metric"><strong>主笔</strong> 市场分析与核心策略</span>
+              <span class="metric"><strong>定位</strong> 五粮藏五酿</span>
+            </div>
+            <p class="text-sm text-[var(--ink-soft)] leading-relaxed">主导前期市场与竞品分析，通过问卷与案头研究精准定位「五粮藏五酿」核心方向，策划方案成功获得客户采纳并落地。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 5. 营销理念 ========== -->
+    <section id="philosophy" class="section-pad">
+      <div class="max-w-6xl mx-auto px-6">
+        <p class="eyebrow reveal">PHILOSOPHY</p>
+        <h2 class="section-title reveal">营销理念</h2>
+
+        <!-- 理念：错落式文本块 -->
+        <div class="max-w-4xl mx-auto">
+          <div class="phi-block fluid md:mr-[8%] reveal">
+            <div class="phi-num">01</div>
+            <h3 class="phi-title">数据驱动决策</h3>
+            <p class="phi-text">从 GMV 拆解到转化漏斗，用数据定位问题、验证策略，让每一次决策都有据可依，而不是拍脑袋。</p>
+          </div>
+          <div class="phi-block fluid md:ml-[12%] reveal">
+            <div class="phi-num">02</div>
+            <h3 class="phi-title">全域营销增长</h3>
+            <p class="phi-text">打通直播、社群、投放与线下场景，构建从种草到转化的完整增长闭环，实现用户与 GMV 的双轮增长。</p>
+          </div>
+          <div class="phi-block fluid md:mr-[4%] reveal">
+            <div class="phi-num">03</div>
+            <h3 class="phi-title">AI 原生工作流</h3>
+            <p class="phi-text">熟练运用 Claude、Codex 等 AI 工具重构数据分析、商业报告与决策流程，京东黑客马拉松获奖实践者。</p>
+          </div>
+          <div class="phi-block fluid md:ml-[8%] reveal">
+            <div class="phi-num">04</div>
+            <h3 class="phi-title">谈判与资源整合</h3>
+            <p class="phi-text">主导合同谈判与毛保策略，联动华为、荣耀、佳能等品牌资源，在博弈中寻找共赢，把资源变成增长杠杆。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 实习经历 ========== -->
+    <section id="experience" class="section-pad">
+      <div class="max-w-6xl mx-auto px-6">
+        <p class="eyebrow reveal">EXPERIENCE</p>
+        <h2 class="section-title reveal">实习经历</h2>
+        <div class="max-w-5xl mx-auto">
+          <div class="exp-card fluid reveal">
+            <div class="exp-head">
+              <div><div class="exp-role">助理采销岗</div><div class="exp-company">京东集团 · 3C 数码事业群</div></div>
+              <span class="exp-period">2026.03 – 2026.08</span>
+            </div>
+            <ul class="exp-list">
+              <li>自营 + POP 店铺全链路运营，主导合同谈判与毛保策略，影棚器材/麦克风类目利润同比增长 5%。</li>
+              <li>操盘 618 大促营销，核心单品同比增长 120%；直播业务 4 个月累计 GMV 400 万，CVR 稳定 3.5%+。</li>
+              <li>AI 驱动供应链优化，库存周转天数缩短 12%，货盘管理决策效率提升 30%。</li>
+            </ul>
+          </div>
+
+          <div class="exp-card fluid reveal">
+            <div class="exp-head">
+              <div><div class="exp-role">高校用户增长实习生</div><div class="exp-company">实习僧（成都萌想科技）</div></div>
+              <span class="exp-period">2025.07 – 2025.11</span>
+            </div>
+            <ul class="exp-list">
+              <li>设计发放 500 份问卷、完成 20 场深度访谈，用 Excel 数据透视 + AI 输出 3 份调研报告，精准定位学生求职痛点。</li>
+              <li>从 0 到 1 建立秋招社群与校园大使网络，覆盖 1500+ 学生，社群活跃度 40%，留存率 85%。</li>
+              <li>策划「内推码裂变」活动，单日新增用户 300+，拉新转化率提升 25%。</li>
+            </ul>
+          </div>
+
+          <div class="exp-card fluid reveal">
+            <div class="exp-head">
+              <div><div class="exp-role">实习店长</div><div class="exp-company">歪马送酒（美团旗下）</div></div>
+              <span class="exp-period">2024.08 – 2024.11</span>
+            </div>
+            <ul class="exp-list">
+              <li>协助管理门店日常运营，协调 5–8 人团队排班与任务分配，交接效率提升 20%。</li>
+              <li>独立执行库存盘点与订单核对，误差率低于 0.5%；协助制定补货计划，降低滞销品占比 15%。</li>
+              <li>完成拉新业绩目标，建立川大校内社群 + 裂变，提升门店销售额。</li>
+            </ul>
+          </div>
+
+          <div class="exp-card fluid reveal">
+            <div class="exp-head">
+              <div><div class="exp-role">校园代理负责人</div><div class="exp-company">高顿教育</div></div>
+              <span class="exp-period">2023.09 – 2023.12</span>
+            </div>
+            <ul class="exp-list">
+              <li>策划并落地 3 场 200+ 人线下宣讲会，负责流程设计、嘉宾对接与现场主持，到场率超预期 150%。</li>
+              <li>独立运营校园小红书账号，10 篇原创干货，单篇最高曝光 10 万+，平均互动率 8%。</li>
+              <li>管理 3 个百人级学习社群，制定打卡 + 干货分享 SOP，提高用户粘性。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 7. 赛场与舞台（精简为2张图片 grid 两列布局） ========== -->
+    <section id="life" class="section-pad">
+      <div class="max-w-6xl mx-auto px-6 mb-6">
+        <p class="eyebrow reveal">BEYOND WORK</p>
+        <h2 class="section-title reveal">赛场与舞台</h2>
+        <p class="text-[var(--ink-soft)] reveal">院篮球队队长 · 校主持队核心成员</p>
+      </div>
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="life-grid">
+          <!-- 素材位置：./assets/life/life-1.jpg（院篮球队） -->
+          <div class="reveal">
+            <div class="life-img-wrap" data-lb="life" data-idx="0">
+              <img src="./assets/life/life-1.jpg" alt="院篮球队" onerror="this.style.display='none'">
+              <div class="img-fallback">院队篮球照片<br>替换 ./assets/life/life-1.jpg</div>
+            </div>
+            <p class="life-cap">院篮球队队长 · 团队管理与抗压</p>
+          </div>
+          <!-- 素材位置：./assets/life/life-3.jpg（校主持队） -->
+          <div class="reveal">
+            <div class="life-img-wrap" data-lb="life" data-idx="1">
+              <img src="./assets/life/life-3.jpg" alt="校主持队" onerror="this.style.display='none'">
+              <div class="img-fallback">主持队照片<br>替换 ./assets/life/life-3.jpg</div>
+            </div>
+            <p class="life-cap">校主持队核心成员 · 累计主持 3000+ 人规模活动 5 场</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 8. 专业能力可视化 ========== -->
+    <section id="skills" class="section-pad">
+      <div class="max-w-6xl mx-auto px-6">
+        <p class="eyebrow reveal">CAPABILITIES</p>
+        <h2 class="section-title reveal">专业能力</h2>
+        <div class="flex flex-col gap-8">
+          <div class="chart-card fluid reveal">
+            <h3 class="chart-title">营销能力雷达</h3>
+            <p class="chart-desc">六维能力模型：市场策划、数据分析、商务谈判、AI 工具、全域运营、内容营销</p>
+            <div class="w-full mx-auto" style="aspect-ratio:1/1;max-height:70vh">
+              <canvas id="radarChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card fluid reveal">
+            <h3 class="chart-title">数据增长成果</h3>
+            <p class="chart-desc">过往项目中的关键指标提升幅度（%）</p>
+            <div class="w-full mx-auto" style="aspect-ratio:5/3;max-height:60vh">
+              <canvas id="barChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ========== 9. 页脚联系区 ========== -->
+    <footer id="contact" class="section-pad pb-10">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="fluid rounded-[2.5rem] px-8 py-12 text-center">
+          <h2 class="text-2xl font-semibold mb-2">赵盟熙</h2>
+          <p class="text-[var(--ink-soft)] mb-6">数据驱动决策 · 全域营销增长</p>
+          <div class="contact-row">
+            <a class="contact-item" href="mailto:zhaomengxi@stu.scu.edu.cn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              zhaomengxi@stu.scu.edu.cn
+            </a>
+            <a class="contact-item" href="tel:+8615528498279">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              (+86) 155-2849-8279
+            </a>
+          </div>
+          <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <!-- 注释：社交链接，顺序为微信、小红书、X -->
+            <a class="social-chip" href="#" target="_blank" rel="noopener">微信 15528498279</a>
+            <a class="social-chip" href="#" target="_blank" rel="noopener">小红书 15528498279</a>
+            <a class="social-chip" href="https://x.com/1rror" target="_blank" rel="noopener">X @1rror</a>
+          </div>
+          <p class="text-xs text-[var(--ink-faint)]">四川大学 · 市场营销（A+）· 2023 – 2027 · 成都</p>
+          <p class="text-[10px] text-[var(--ink-faint)] mt-4">&copy; 2026 赵盟熙 · 纯静态简历站点</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+
+  <!-- ========== 项目详情弹窗 ========== -->
+  <div id="projModal" aria-hidden="true">
+    <div id="projModalBackdrop"></div>
+    <button type="button"  class="proj-modal-close" aria-label="关闭"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div id="projModalContent" class="fluid fluid-strong">
+      <img id="projModalImg" class="proj-modal-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
+      <div id="projModalBody"></div>
+    </div>
+  </div>
+
+  <!-- ========== Lightbox 图片弹窗 ========== -->
+  <div id="lightbox" class="fixed inset-0" aria-hidden="true">
+    <div id="lbBackdrop" class="absolute inset-0"></div>
+    <button type="button"  id="lbClose" class="lb-btn lb-close" aria-label="关闭预览"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <button type="button"  id="lbPrev" class="lb-btn lb-prev" aria-label="上一张"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <button type="button"  id="lbNext" class="lb-btn lb-next" aria-label="下一张"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+    <figure id="lbFigure">
+      <img id="lbImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
+      <figcaption id="lbCap"></figcaption>
+    </figure>
+  </div>
+
+  <!-- Toast 提示条 -->
+  <div id="toast" class="fluid">提示</div>
+
+  <noscript>
+    <div style="position:fixed;bottom:1rem;left:1rem;right:1rem;padding:.75rem 1rem;background:rgba(0,0,0,.6);color:#fff;border-radius:1rem;text-align:center;font-size:.85rem;z-index:100">本页面依赖 JavaScript 实现主题切换、动效与音频播放器，请开启 JS 后浏览最佳效果。</div>
+  </noscript>
+  <script>
+    /* ============================================================
+       赵盟熙个人简历站点 · 主逻辑
+       技术栈：HTML5 + TailwindCSS CDN + GSAP CDN + 原生 JS
+       所有素材均使用固定相对路径，关键位置已用中文注释标注。
+       ============================================================ */
+    (function(){
+      'use strict';
+
+      const $  = (s, c=document) => c.querySelector(s);
+      const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
+      const root = document.documentElement;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const hasGsap = typeof window.gsap !== 'undefined';
+      if (!hasGsap) root.classList.add('no-gsap');
+      if (hasGsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+      /* ========== 工具函数 ========== */
+      function fmtTime(s){
+        if (!isFinite(s)) return '0:00';
+        const m = Math.floor(s/60); const sec = Math.floor(s%60);
+        return m + ':' + (sec<10?'0':'') + sec;
+      }
+      function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+      function debounce(fn, ms){
+        let t; return function(){ clearTimeout(t); t=setTimeout(fn.bind(this, ...arguments), ms); };
+      }
+      let toastTl = null;
+      function toast(msg){
+        const el = $('#toast');
+        el.textContent = msg;
+        if (hasGsap){
+          if (toastTl) toastTl.kill();
+          toastTl = gsap.timeline()
+            .to(el, {autoAlpha:1, y:0, duration:.3})
+            .to(el, {autoAlpha:0, y:8, duration:.4}, '+=2.6');
+        } else {
+          el.style.opacity = 1; el.style.visibility = 'visible';
+          setTimeout(()=>{ el.style.opacity=0; el.style.visibility='hidden'; }, 3000);
+        }
+      }
+
+      /* ========== 背景层：视频优先 / 图片兜底 / 渐变兜底 ========== */
+      function setupBgLayer(layerId, videoSel, imgSel){
+        var layer = document.querySelector(layerId); if(!layer) return;
+        var video = layer.querySelector(videoSel);
+        var img = layer.querySelector(imgSel);
+        if (!video) return;
+        // 强制播放视频
+        if (video.play) { var p = video.play(); if (p && p.catch) p.catch(function(){}); }
+        video.addEventListener('loadeddata', function(){ video.style.opacity = '1'; });
+        video.addEventListener('canplay', function(){ video.style.opacity = '1'; if (video.play) video.play().catch(function(){}); });
+        // 只有视频真正加载失败才显示图片
+        video.addEventListener('error', function(){ if (img) img.style.display = 'block'; });
+        var srcEl = video.querySelector('source');
+        if (srcEl) srcEl.addEventListener('error', function(){ if (img) img.style.display = 'block'; });
+      }
+      setupBgLayer('#bgLayerLight', 'video', '.bg-fallback');
+      setupBgLayer('#bgLayerDark',  'video', '.bg-fallback');
+
+      /* ========== 主题系统：localStorage 记忆 + 平滑切换 ========== */
+      function setTheme(theme, opts){
+        opts = opts || {};
+        const prev = root.dataset.theme;
+        if (prev === theme) return;
+        root.classList.add('theming');
+        root.dataset.theme = theme;
+        if (opts.persist !== false) localStorage.setItem('zmx-theme', theme);
+
+        if (hasGsap){
+          // 背景层用 CSS 控制可见性，不依赖 GSAP
+          document.getElementById('bgLayerLight').style.opacity = theme==='light' ? '1' : '0';
+          document.getElementById('bgLayerDark').style.opacity = theme==='dark' ? '1' : '0';
+          gsap.to('#avatarLight',  {autoAlpha: theme==='light'?1:0, scale: theme==='light'?1:0.94, duration:.9, ease:'power2.out'});
+          gsap.to('#avatarDark',   {autoAlpha: theme==='dark'?1:0,  scale: theme==='dark'?1:0.94,  duration:.9, ease:'power2.out'});
+          gsap.to('#aboutAvatarLight', {autoAlpha: theme==='light'?1:0, scale: theme==='light'?1:0.94, duration:.9, ease:'power2.out'});
+          gsap.to('#aboutAvatarDark',  {autoAlpha: theme==='dark'?1:0,  scale: theme==='dark'?1:0.94,  duration:.9, ease:'power2.out'});
+        }
+
+        // 个人介绍板块头像主题切换
+        const aboutLight = $('#aboutAvatarLight');
+        const aboutDark = $('#aboutAvatarDark');
+        if (aboutLight && aboutDark){
+          if (theme === 'dark'){
+            aboutLight.style.opacity = '0';
+            aboutDark.style.opacity = '1';
+          } else {
+            aboutLight.style.opacity = '1';
+            aboutDark.style.opacity = '0';
+          }
+        }
+
+        AudioPlayer.setTheme(theme);
+        Charts.refresh();
+        setTimeout(function(){ root.classList.remove('theming'); }, 1100);
+      }
+      $('#themeToggle').addEventListener('click', function(){
+        setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+      });
+
+      /* ========== 图表模块：Canvas 手绘雷达图 + 柱状图 ========== */
+      const Charts = (function(){
+        const RADAR = {
+          labels: ['市场策划','数据分析','商务谈判','AI 工具','全域运营','内容营销'],
+          values: [92, 88, 90, 95, 86, 84]
+        };
+        const BARS = [
+          {label:'核心单品同比', value:120},
+          {label:'日均订单',     value:40},
+          {label:'决策效率',     value:30},
+          {label:'拉新转化',     value:25},
+          {label:'投放效率',     value:20}
+        ];
+        const BAR_MAX = 130;
+        let radarProgress = 0, barProgress = 0;
+        let radarDrawn = false, barDrawn = false;
+
+        function setupCanvas(canvas){
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const rect = canvas.getBoundingClientRect();
+          const w = Math.max(1, rect.width), h = Math.max(1, rect.height);
+          canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+          const ctx = canvas.getContext('2d');
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ctx.clearRect(0,0,w,h);
+          return {ctx, w, h};
+        }
+        function cssVar(name, fallback){
+          const v = getComputedStyle(root).getPropertyValue(name).trim();
+          return v || fallback;
+        }
+        function drawRadar(){
+          const canvas = $('#radarChart'); if (!canvas) return;
+          const {ctx, w, h} = setupCanvas(canvas);
+          const accent = cssVar('--accent', '#7fb8e4');
+          const accentStrong = cssVar('--accent-strong', '#a8d4f0');
+          const inkText = cssVar('--ink-soft', 'rgba(255,255,255,.7)');
+          // 减小雷达图边距，让图表在Canvas内占满更多面积
+          const cx=w/2, cy=h/2+4, R=Math.min(w,h)/2-10, N=RADAR.labels.length;
+          const pt = (i,r)=>{ const a=-Math.PI/2 + i*2*Math.PI/N; return [cx+Math.cos(a)*r, cy+Math.sin(a)*r]; };
+          ctx.lineJoin = 'round';
+          for (let ring=4; ring>=1; ring--){
+            const r = R*ring/4; ctx.beginPath();
+            for (let i=0; i<=N; i++){ const [x,y]=pt(i%N,r); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+            ctx.closePath(); ctx.fillStyle = inkText; ctx.globalAlpha = ring%2 ? .045 : .025; ctx.fill();
+          }
+          ctx.strokeStyle = inkText; ctx.globalAlpha = .12; ctx.lineWidth = 1;
+          for (let i=0; i<N; i++){ ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(...pt(i,R)); ctx.stroke(); }
+          ctx.beginPath();
+          RADAR.values.forEach((v,i)=>{ const [x,y]=pt(i, R*(v/100)*radarProgress); i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
+          ctx.closePath();
+          const g = ctx.createRadialGradient(cx,cy,R*0.1, cx,cy,R*0.95);
+          g.addColorStop(0, accentStrong); g.addColorStop(1, accent);
+          ctx.fillStyle = g; ctx.globalAlpha = .34; ctx.fill();
+          ctx.strokeStyle = accentStrong; ctx.globalAlpha = .9; ctx.lineWidth = 2;
+          ctx.shadowColor = accent; ctx.shadowBlur = 14; ctx.stroke(); ctx.shadowBlur = 0;
+          RADAR.values.forEach((v,i)=>{
+            const [x,y]=pt(i, R*(v/100)*radarProgress);
+            ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2);
+            ctx.fillStyle = accentStrong; ctx.globalAlpha=.9; ctx.shadowColor=accent; ctx.shadowBlur=10; ctx.fill(); ctx.shadowBlur=0;
+          });
+          ctx.font = '12px "PingFang SC","Microsoft YaHei",sans-serif';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = inkText; ctx.globalAlpha = .9;
+          // 标签离图表更近，让雷达图在Canvas内占满更多面积
+          RADAR.labels.forEach((lb,i)=>{ const [x,y]=pt(i, R+18); ctx.fillText(lb,x,y); });
+        }
+        function roundRectTop(ctx, x, y, w, h, r){
+          r = Math.min(r, w/2, h); ctx.beginPath(); ctx.moveTo(x+r, y);
+          ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+          ctx.lineTo(x+w, y+h); ctx.lineTo(x, y+h); ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y); ctx.closePath();
+        }
+        function drawBars(){
+          const canvas = $('#barChart'); if (!canvas) return;
+          const {ctx, w, h} = setupCanvas(canvas);
+          const accent = cssVar('--accent', '#7fb8e4');
+          const accentStrong = cssVar('--accent-strong', '#a8d4f0');
+          const inkText = cssVar('--ink-soft', 'rgba(255,255,255,.7)');
+          // 缩小柱状图Canvas内边距，让柱状图占满更多面积
+          const padL=4, padR=4, padT=10, padB=16;
+          const n = BARS.length, gap = 18;
+          const bw = (w-padL-padR-gap*(n-1))/n; const chartH = h-padT-padB;
+          ctx.strokeStyle = inkText; ctx.globalAlpha=.08; ctx.lineWidth=1;
+          ctx.beginPath(); ctx.moveTo(padL, h-padB); ctx.lineTo(w-padR, h-padB); ctx.stroke();
+          BARS.forEach((b,i)=>{
+            const pi = clamp01((barProgress - i*0.12)/0.88);
+            const ease = 1 - Math.pow(1-pi, 3);
+            const bh = chartH*(b.value/BAR_MAX)*ease;
+            const x = padL + i*(bw+gap); const y = h - padB - bh;
+            const grad = ctx.createLinearGradient(0, y, 0, h-padB);
+            grad.addColorStop(0, accentStrong); grad.addColorStop(1, accent);
+            roundRectTop(ctx, x, y, bw, bh, Math.min(10, bw/2, bh));
+            ctx.fillStyle = grad; ctx.globalAlpha = .8; ctx.shadowColor=accent; ctx.shadowBlur=10; ctx.fill(); ctx.shadowBlur=0;
+            ctx.font = '600 13px "PingFang SC","Microsoft YaHei",sans-serif';
+            ctx.fillStyle = inkText; ctx.globalAlpha = .95; ctx.textAlign = 'center';
+            // 数值标签离柱顶更近
+            ctx.fillText('+'+b.value+'%', x+bw/2, y-8);
+            ctx.font = '11px "PingFang SC","Microsoft YaHei",sans-serif';
+            ctx.globalAlpha = .75; ctx.fillText(b.label, x+bw/2, h-padB+16);
+          });
+        }
+        function refresh(){ drawRadar(); drawBars(); }
+        function init(){
+          if (hasGsap && !reduceMotion){
+            if (!radarDrawn){
+              ScrollTrigger.create({
+                trigger: '#radarChart', start: 'top 85%', once: true,
+                onEnter: ()=>{
+                  radarDrawn = true;
+                  gsap.to({p:0},{p:1,duration:1.5,ease:'power3.out',onUpdate:function(){ radarProgress=this.targets()[0].p; drawRadar(); }});
+                }
+              });
+            }
+            if (!barDrawn){
+              ScrollTrigger.create({
+                trigger: '#barChart', start: 'top 85%', once: true,
+                onEnter: ()=>{
+                  barDrawn = true;
+                  gsap.to({p:0},{p:1,duration:1.5,ease:'power3.out',delay:.15,onUpdate:function(){ barProgress=this.targets()[0].p; drawBars(); }});
+                }
+              });
+            }
+          } else {
+            radarProgress = 1; barProgress = 1; refresh();
+          }
+          window.addEventListener('resize', debounce(refresh, 150));
+        }
+        return {init, refresh};
+      })();
+
+      /* ========== 数字滚动统计 ========== */
+      function initCounters(){
+        $$('.stat-num').forEach(function(el){
+          const target = parseFloat(el.dataset.target) || 0;
+          const suffix = el.dataset.suffix || '';
+          function run(){
+            if (hasGsap){
+              const o = {v:0};
+              gsap.to(o, {v:target, duration:1.6, ease:'power2.out', onUpdate:()=>{ el.textContent = Math.round(o.v) + suffix; }});
+            } else { el.textContent = target + suffix; }
+          }
+          if (hasGsap){
+            ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: run });
+          } else { run(); }
+        });
+      }
+
+      /* ========== 项目横向滚动（桌面 GSAP pin + 移动 overflow-x） ========== */
+      function initProjectsScroll(){
+        const viewport = $('#projViewport');
+        const track = $('#projTrack');
+        if (!viewport || !track) return;
+        if (reduceMotion || !hasGsap){ viewport.classList.add('native-scroll'); return; }
+        const mm = gsap.matchMedia();
+        mm.add('(min-width: 1024px)', function(){
+          viewport.classList.add('pinned'); viewport.classList.remove('native-scroll');
+          const getAmount = function(){ return track.scrollWidth - viewport.clientWidth; };
+          const tween = gsap.to(track, {
+            x: function(){ return -getAmount(); },
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '#projects', start: 'top top', end: function(){ return '+=' + getAmount(); },
+              pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1
+            }
+          });
+          return function(){
+            tween.scrollTrigger && tween.scrollTrigger.kill(); tween.kill();
+            gsap.set(track, {x:0}); viewport.classList.remove('pinned'); viewport.classList.add('native-scroll');
+          };
+        });
+      }
+
+
+      /* ========== \u4fa7\u8fb9\u5bfc\u822a\u903b\u8f91 ========== */
+      function initSideNav(){
+        var nav = $('#sideNav'); if (!nav) return;
+        var links = $$('.nav-link', nav);
+        var ids = ['hero','about','stats','projects','philosophy','experience','life','skills'];
+        var secs = ids.map(function(id){ return $('#'+id); }).filter(Boolean);
+        function chk(){
+          var h = $('#hero'); if(!h) return;
+          nav.classList.toggle('visible', h.getBoundingClientRect().bottom < 0);
+        }
+        window.addEventListener('scroll', chk, {passive:true}); chk();
+        links.forEach(function(l){
+          l.addEventListener('click', function(e){
+            e.preventDefault();
+            var t = document.querySelector(this.getAttribute('href'));
+            if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+          });
+        });
+        if('IntersectionObserver' in window){
+          var obs = new IntersectionObserver(function(entries){
+            entries.forEach(function(en){
+              if(en.isIntersecting){
+                links.forEach(function(l){
+                  l.classList.toggle('active', l.getAttribute('href')==='#'+en.target.id);
+                });
+              }
+            });
+          }, {rootMargin:'-30% 0px -60% 0px', threshold:0});
+          secs.forEach(function(s){ obs.observe(s); });
+        }
+      }
+
+      /* ========== 项目详情弹窗 + 自动滚动 ========== */
+      function initProjModal(){
+        var modal = document.getElementById('projModal');
+        if (!modal) return;
+        var backdrop = document.getElementById('projModalBackdrop');
+        var closeBtn = modal.querySelector('.proj-modal-close');
+        var modalImg = document.getElementById('projModalImg');
+        var modalBody = document.getElementById('projModalBody');
+        var projData = {'p1': {'title': '京东 · 618 大促全链路操盘', 'period': '2026.03 – 2026.08 · 3C 数码事业群', 'tags': '电商运营、商务谈判、AI 供应链', 'metrics': '+120% 核心单品同比 / -12% 库存周转天数 / +5% 类目利润同比', 'desc': '独立操盘自营及 POP 店铺全链路运营，主导合同谈判与毛保策略；618 大促期间以 AI 工具驱动货盘管理与供应链优化，决策效率提升 30%。'}, 'p2': {'title': '京东众筹「101 AIdol」· AI 硬件孵化', 'period': '2026 · AI 配件供应链壁垒', 'tags': '新品孵化、招商建联、整合营销', 'metrics': '500+ 首日订单 / 2000万+ 微博话题曝光 / 20+ 新商入驻自营', 'desc': '全权操盘京东众筹 AI 项目，孵化 Motvox 消音口罩；主动建联 100+ 新商，扩充品类新供给 25%，联动华为、荣耀、佳能绑赠，单月带动 2 万台销售。'}, 'p3': {'title': '跨境抖店独立运营 · 泰国市场', 'period': '2024.01 – 2024.12 · 国内/跨境抖店', 'tags': '跨境电商、千川投放、选品策略', 'metrics': '+30% 日均订单量 / +40% 销售额 / -15% 转化成本', 'desc': '负责 120+ SKU 选品上架与主图详情页优化；巨量千川 A/B 测试提升投放效率 20%；基于 Shopee 大数据洞察消费趋势，结合大促节点策划营销。'}, 'p4': {'title': '五酿品牌营销策划', 'period': '2025.09 – 2025.11', 'tags': '市场调研、品牌策略、方案落地', 'metrics': '采纳落地策划案 / 主笔市场分析与核心策略 / 定位五粮藏五酿', 'desc': '主导前期市场与竞品分析，通过问卷与案头研究精准定位「五粮藏五酿」核心方向，策划方案成功获得客户采纳并落地。'}};
+
+        function open(pid){
+          var d = projData[pid]; if (!d) return;
+          var card = document.querySelector('[data-proj="' + pid + '"]');
+          var imgSrc = '';
+          if (card) { var img = card.querySelector('img'); if (img && img.src) imgSrc = img.src; }
+          modalImg.src = imgSrc;
+          modalImg.alt = d.title;
+          modalBody.innerHTML = '<h3 style="font-size:1.4rem;font-weight:700;margin-bottom:.5rem">' + d.title + '</h3>'
+            + '<p style="font-size:.82rem;opacity:.7;margin-bottom:.8rem">' + d.period + '</p>'
+            + '<div style="margin-bottom:.8rem"><span style="font-size:.72rem;color:var(--accent);letter-spacing:.08em;text-transform:uppercase">TAGS</span><p style="font-size:.88rem;margin-top:.3rem">' + d.tags + '</p></div>'
+            + '<div style="margin-bottom:.8rem"><span style="font-size:.72rem;color:var(--accent);letter-spacing:.08em;text-transform:uppercase">METRICS</span><p style="font-size:.88rem;margin-top:.3rem">' + d.metrics + '</p></div>'
+            + '<div><span style="font-size:.72rem;color:var(--accent);letter-spacing:.08em;text-transform:uppercase">DESCRIPTION</span><p style="font-size:.9rem;line-height:1.7;margin-top:.3rem;color:var(--ink-soft)">' + d.desc + '</p></div>';
+          modal.classList.add('open');
+          document.body.style.overflow = 'hidden';
+          if (hasGsap) gsap.fromTo('#projModalContent', {scale:.92, opacity:0}, {scale:1, opacity:1, duration:.35, ease:'power3.out'});
+        }
+        function close(){
+          modal.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+        // Click on project visual opens modal (instead of just lightbox)
+        document.querySelectorAll('[data-proj]').forEach(function(el){
+          el.addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            open(this.getAttribute('data-proj'));
+          });
+        });
+        // Also make the article title clickable
+        document.querySelectorAll('.proj-card h3').forEach(function(h){
+          h.style.cursor = 'pointer';
+          h.addEventListener('click', function(){
+            var card = this.closest('.proj-card');
+            var visual = card && card.querySelector('[data-proj]');
+            if (visual) open(visual.getAttribute('data-proj'));
+          });
+        });
+        closeBtn.addEventListener('click', close);
+        backdrop.addEventListener('click', close);
+        window.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+
+        // 无缝循环自动滚动（所有模式统一处理）
+        var viewport2 = document.getElementById('projViewport');
+        var track2 = document.getElementById('projTrack');
+        if (viewport2 && track2) {
+          // 复制卡片实现首尾无缝衔接
+          var origCards = track2.querySelectorAll('.proj-card');
+          var onlyFirstSet = true; // 只在第一次执行时复制
+          var frag = document.createDocumentFragment();
+          origCards.forEach(function(card) {
+            if (onlyFirstSet) {
+              var c = card.cloneNode(true);
+              frag.appendChild(c);
+            }
+          });
+          if (onlyFirstSet) {
+            track2.appendChild(frag);
+          }
+
+          // 重新绑定克隆卡片的点击事件
+          track2.querySelectorAll('[data-proj]').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              open(this.getAttribute('data-proj'));
+            });
+          });
+
+          // 用 IntersectionObserver 控制滚动：进入视口开始，离开停止
+          var scrollOn = false;
+          var projObs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting) {
+                if (!scrollOn) { scrollOn = true; track2.classList.add('seamless-scroll'); }
+              } else {
+                if (scrollOn) { scrollOn = false; track2.classList.remove('seamless-scroll'); }
+              }
+            });
+          }, { threshold: 0.15 });
+          projObs.observe(document.getElementById('projects'));
+        }
+      }
+
+      /* ========== 滚动Reveal动画 ========== */
+      function initReveal(){
+        if (!hasGsap || reduceMotion) return;
+        gsap.set('.reveal', {autoAlpha:0, y:40});
+        ScrollTrigger.batch('.reveal', {
+          start: 'top 88%',
+          onEnter: function(els){ gsap.to(els, {autoAlpha:1, y:0, duration:.9, stagger:.1, ease:'power3.out', overwrite:true}); },
+          once: true
+        });
+      }
+
+      /* ========== Hero 入场与视差 ========== */
+      function initHero(){
+        if (!hasGsap || reduceMotion) return;
+        const tl = gsap.timeline({defaults:{ease:'power3.out'}});
+        tl.from('#avatarWrap', {autoAlpha:0, scale:.82, duration:1.2})
+          .from('.hero-eyebrow', {y:24, autoAlpha:0, duration:.8}, '-=.7')
+          .from('.hero-name',    {y:34, autoAlpha:0, duration:.9}, '-=.55')
+          .from('.hero-tag',     {y:18, autoAlpha:0, stagger:.08, duration:.6}, '-=.5')
+          .from('.hero-slogan',  {y:16, autoAlpha:0, duration:.7}, '-=.35')
+          .from('.hero-summary', {y:14, autoAlpha:0, duration:.65}, '-=.3')
+          .from('.hero-summary', {y:14, autoAlpha:0, duration:.6}, '-=.3')
+          .from('#themeToggle',  {autoAlpha:0, duration:.6}, '-=.4')
+          .from('#player',       {autoAlpha:0, y:16, duration:.6}, '-=.5')
+          .from('#scrollHint',   {autoAlpha:0, duration:.6}, '-=.3');
+
+        gsap.to('#heroText',   {yPercent:-28, autoAlpha:.15, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:true}});
+        gsap.to('#avatarWrap', {yPercent:14, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:true}});
+      }
+
+      /* ========== 左侧固定导航栏逻辑 ========== */
+
+
+      /* ========== 音频播放器 ========== */
+      const AudioPlayer = (function(){
+        const PLAYLISTS = {
+          light: {
+            label: 'SOS · 海洋歌单',
+            tracks: [
+              {title:'海潮 · Ocean Drift', src:'./assets/audio/light/music-1.mp3'},
+            ]
+          },
+          dark: {
+            label: 'STATION · 黑金歌单',
+            tracks: [
+              {title:'金尘 · Gold Dust',           src:'./assets/audio/dark/music-1.mp3'},
+            ]
+          }
+        };
+        const audio = new Audio();
+        audio.preload = 'metadata';
+        audio.muted = false;
+        audio.volume = 0.5;
+        const TARGET_VOL = .5;
+        let theme = root.dataset.theme || 'light';
+        let idx = 0, isPlaying = false, userInteracted = false;
+        let panelOpen = false;
+        let volTween = null;
+
+        function current(){ return PLAYLISTS[theme].tracks[idx]; }
+        function loadMeta(){
+          const t = current();
+          $('#plThemeLabel').textContent = PLAYLISTS[theme].label;
+          $('#plTitle').textContent = t ? t.title : '—';
+          $('#plDuration').textContent = '0:00';
+          $('#plCurrent').textContent = '0:00';
+          $('#plFill').style.width = '0%';
+        }
+        function updatePlayIcon(){ $('#plPlayIcon').style.display = isPlaying ? 'none' : 'block'; $('#plPauseIcon').style.display = isPlaying ? 'block' : 'none'; }
+        function updateMuteIcon(){ $('#plVolIcon').style.display = audio.muted ? 'none' : 'block'; $('#plMuteIcon').style.display = audio.muted ? 'block' : 'none'; }
+        function ui(){ updatePlayIcon(); updateMuteIcon(); $('#playerFab').classList.toggle('playing', isPlaying); }
+        function fadeVol(target, cb){
+          if (volTween) volTween.kill();
+          if (!hasGsap){ audio.volume = target; if (cb) cb(); return; }
+          const o = {v: audio.volume};
+          volTween = gsap.to(o, {v:target, duration:.4, ease:'power1.out', onUpdate:()=>{ audio.volume = o.v; }, onComplete: cb});
+        }
+        function play(){
+          const t = current(); if (!t) return;
+          if (audio.getAttribute('src') !== t.src){ audio.src = t.src; audio.load(); }
+          userInteracted = true;
+          audio.play().then(()=>{ isPlaying = true; ui(); fadeVol(TARGET_VOL); }).catch(()=>{ toast('浏览器需要你先与页面交互，请再点一次播放'); });
+        }
+        function pause(){ fadeVol(0, ()=>{ audio.pause(); isPlaying=false; ui(); }); }
+        function next(auto){
+          idx = (idx + 1) % PLAYLISTS[theme].tracks.length;
+          loadMeta(); if (isPlaying || auto) play(); else ui();
+        }
+        function prev(){
+          idx = (idx - 1 + PLAYLISTS[theme].tracks.length) % PLAYLISTS[theme].tracks.length;
+          loadMeta(); if (isPlaying) play(); else ui();
+        }
+        function toggleMute(){
+          audio.muted = !audio.muted;
+          if (!audio.muted && audio.volume < 0.05) audio.volume = TARGET_VOL;
+          updateMuteIcon();
+        }
+        function setTheme(newTheme){
+          if (newTheme === theme) return;
+          const wasPlaying = isPlaying;
+          fadeVol(0, function(){
+            audio.pause(); isPlaying = false; audio.removeAttribute('src');
+            theme = newTheme; idx = Math.min(idx, PLAYLISTS[theme].tracks.length - 1);
+            loadMeta(); ui(); if (wasPlaying) play();
+          });
+        }
+        function togglePanel(){ panelOpen = !panelOpen; $('#playerPanel').classList.toggle('open', panelOpen); }
+        function seek(e){
+          const rect = $('#plProgress').getBoundingClientRect();
+          const r = clamp01((e.clientX - rect.left)/rect.width);
+          if (audio.duration) audio.currentTime = r * audio.duration;
+        }
+        $('#playerFab').addEventListener('click', togglePanel);
+        $('#plCollapse').addEventListener('click', togglePanel);
+        $('#plPlay').addEventListener('click', ()=> isPlaying ? pause() : play());
+        $('#plPrev').addEventListener('click', prev);
+        $('#plNext').addEventListener('click', ()=> next(false));
+        $('#plMute').addEventListener('click', toggleMute);
+        $('#plProgress').addEventListener('click', seek);
+        audio.addEventListener('timeupdate', function(){
+          $('#plCurrent').textContent = fmtTime(audio.currentTime || 0);
+          $('#plDuration').textContent = fmtTime(audio.duration || 0);
+          $('#plFill').style.width = (audio.duration ? (audio.currentTime/audio.duration*100) : 0) + '%';
+        });
+        audio.addEventListener('ended', function(){ next(true); });
+        audio.addEventListener('error', function(){
+          if (!audio.getAttribute('src')) return;
+          toast('音频文件缺失：' + audio.getAttribute('src') + '（请将 mp3 放入对应目录）');
+          isPlaying = false; ui();
+        });
+        audio.addEventListener('loadedmetadata', function(){ $('#plDuration').textContent = fmtTime(audio.duration || 0); });
+        loadMeta(); ui();
+        return {setTheme, play, pause, toggleMute};
+      })();
+      window.AudioPlayer = AudioPlayer;
+
+      /* ========== 自动播放背景音乐 ========== */
+      (function(){
+        var autoPlayed = false;
+        function doPlay(){
+          if (autoPlayed) return;
+          autoPlayed = true;
+          if (window.AudioPlayer && typeof window.AudioPlayer.play === 'function') {
+            window.AudioPlayer.play();
+          }
+        }
+        setTimeout(doPlay, 500);
+        ['click','touchstart','keydown','pointerdown'].forEach(function(evt){
+          document.addEventListener(evt, doPlay, { once: true, passive: true });
+        });
+      })();;
+
+      /* ========== Lightbox 图片弹窗 ========== */
+      const Lightbox = (function(){
+        const box = $('#lightbox'); const img = $('#lbImg'); const cap = $('#lbCap');
+        const groups = {}; let state = {g:null, i:0};
+        $$('[data-lb]').forEach(function(el){
+          const g = el.dataset.lb; (groups[g] = groups[g] || []).push(el);
+          el.addEventListener('click', function(){ open(g, +el.dataset.idx || 0); });
+        });
+        function validItems(g){ return (groups[g] || []).filter(function(el){ return el.complete ? el.naturalWidth > 0 : true; }); }
+        function open(g, i){
+          const items = validItems(g); if (!items.length) return;
+          state = {g, i: Math.min(i, items.length-1)};
+          render(items); document.body.style.overflow = 'hidden';
+          box.style.display = 'grid';
+          if (hasGsap) gsap.fromTo(box, {autoAlpha:0}, {autoAlpha:1, duration:.25}).fromTo(img, {scale:.96, opacity:.8}, {scale:1, opacity:1, duration:.3, ease:'power2.out'}, 0);
+          else box.style.opacity = 1;
+        }
+        function render(items){
+          const el = items[state.i]; img.src = el.getAttribute('src'); cap.textContent = el.getAttribute('alt') || '';
+          $('#lbPrev').style.display = items.length > 1 ? 'grid' : 'none';
+          $('#lbNext').style.display = items.length > 1 ? 'grid' : 'none';
+        }
+        function nav(dir){
+          const items = validItems(state.g); if (items.length <= 1) return;
+          state.i = (state.i + dir + items.length) % items.length;
+          if (hasGsap) gsap.to(img, {opacity:.7, scale:.98, duration:.12, yoyo:true, repeat:1, onRepeat:()=>render(items)});
+          else render(items);
+        }
+        function close(){
+          document.body.style.overflow = '';
+          if (hasGsap) gsap.to(box, {autoAlpha:0, duration:.2, onComplete:()=>{ box.style.display='none'; }});
+          else { box.style.opacity=0; box.style.display='none'; }
+        }
+        $('#lbClose').addEventListener('click', close);
+        $('#lbBackdrop').addEventListener('click', close);
+        $('#lbPrev').addEventListener('click', ()=>nav(-1));
+        $('#lbNext').addEventListener('click', ()=>nav(1));
+        window.addEventListener('keydown', function(e){
+          if (box.style.display === 'none' || box.style.display === '') return;
+          if (e.key === 'Escape') close();
+          if (e.key === 'ArrowLeft') nav(-1);
+          if (e.key === 'ArrowRight') nav(1);
+        });
+        return {open};
+      })();
+
+      /* ========== 初始化 ========== */
+      const initialTheme = root.dataset.theme || 'light';
+      if (hasGsap){
+        // 用 CSS 控制初始可见性
+        document.getElementById('bgLayerLight').style.opacity = initialTheme==='light' ? '1' : '0';
+        document.getElementById('bgLayerDark').style.opacity = initialTheme==='dark' ? '1' : '0';
+        gsap.set('#avatarLight',  {autoAlpha: initialTheme==='light'?1:0, scale: initialTheme==='light'?1:0.94});
+        gsap.set('#avatarDark',   {autoAlpha: initialTheme==='dark'?1:0,  scale: initialTheme==='dark'?1:0.94});
+        gsap.set('#aboutAvatarLight', {autoAlpha: initialTheme==='light'?1:0, scale: initialTheme==='light'?1:0.94});
+        gsap.set('#aboutAvatarDark',  {autoAlpha: initialTheme==='dark'?1:0,  scale: initialTheme==='dark'?1:0.94});
+      }
+      // 初始化个人介绍板块头像的主题显示
+      const aboutLight = $('#aboutAvatarLight');
+      const aboutDark = $('#aboutAvatarDark');
+      if (aboutLight && aboutDark){
+        if (initialTheme === 'dark'){ aboutLight.style.opacity = '0'; aboutDark.style.opacity = '1'; }
+        else { aboutLight.style.opacity = '1'; aboutDark.style.opacity = '0'; }
+      }
+
+      initHero();
+      initSideNav();
+      initProjModal();
+      initReveal();
+      initCounters();
+      Charts.init();
+      initProjectsScroll();
+
+      window.addEventListener('resize', debounce(function(){ if (hasGsap) ScrollTrigger.refresh(); }, 200));
+    })();
+  </script>
+
+  <script>
+    // 强制确保背景视频显示 - 最后执行的保险措施
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        var theme = document.documentElement.dataset.theme || 'light';
+        var bgL = document.getElementById('bgLayerLight');
+        var bgD = document.getElementById('bgLayerDark');
+        if (bgL) { bgL.style.opacity = '1'; bgL.style.visibility = 'visible'; bgL.style.display = 'block'; }
+        if (bgD) { bgD.style.opacity = '1'; bgD.style.visibility = 'visible'; bgD.style.display = 'block'; }
+        // 非当前主题的背景层隐藏
+        if (theme === 'light' && bgD) { bgD.style.opacity = '0'; bgD.style.visibility = 'hidden'; }
+        if (theme === 'dark' && bgL) { bgL.style.opacity = '0'; bgL.style.visibility = 'hidden'; }
+        // 强制播放所有视频
+        document.querySelectorAll('video.bg-media').forEach(function(v){
+          v.style.opacity = '1';
+          v.style.display = 'block';
+          v.muted = true;
+          v.play().catch(function(){});
+        });
+      }, 100);
+    });
+  </script>
+</body>
+</html>
