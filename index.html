@@ -19,22 +19,9 @@
   </script>
 
   <!-- TailwindCSS -->
-  <script src="./assets/js/tailwindcss.js"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"PingFang SC"', '"Hiragino Sans GB"', '"Microsoft YaHei"', '"Noto Sans SC"', 'system-ui', 'sans-serif'],
-          },
-        },
-      },
-    };
-  </script>
+  <link rel="stylesheet" href="./tailwind-final.css">
+  
 
-  <!-- GSAP + ScrollTrigger -->
-  <script src="./assets/js/gsap.min.js"></script>
-  <script src="./assets/js/ScrollTrigger.min.js"></script>
 
   <style>
     /* ========== CSS 变量注册（支持主题切换时颜色平滑插值） ========== */
@@ -80,11 +67,11 @@
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    
     body {
       margin: 0;
       color: var(--ink);
       font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
-      background: #050b14;
       overflow-x: hidden;
     }
 
@@ -408,9 +395,10 @@
     #projects { position: relative; }
     #projViewport { overflow-x: auto; }
     #projViewport.pinned { overflow-x: visible; }
-    #projTrack { display: flex; gap: 1.75rem; padding: 0 1rem 2rem; }
+    #projTrack { display: flex; gap: 1.75rem; padding: 0 1rem 2rem; width: max-content; }
     .proj-card {
-      flex: 0 0 auto; width: min(82vw, 560px);
+      flex: 0 0 auto;
+      background: var(--surface); width: min(82vw, 560px);
       border-radius: 2rem; padding: 1.25rem;
       scroll-snap-align: start;
     }
@@ -418,14 +406,15 @@
     .proj-visual img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
     .proj-visual:hover img { transform: scale(1.04); }
     .img-fallback {
-      position: absolute; inset: 0; display: grid; place-items: center;
+      position: absolute; inset: 0; display: none; place-items: center;
       background: radial-gradient(120% 120% at 30% 20%, var(--surface-hi), var(--surface) 60%);
       color: var(--ink-faint); font-size: .8rem; text-align: center; padding: 1rem;
     }
+    img.error + .img-fallback { display: grid; }
     .proj-meta { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0 .6rem; }
     .proj-tag { padding: .22rem .65rem; border-radius: 999px; font-size: .72rem; color: var(--ink-soft); background: var(--surface); }
-    .proj-metrics { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
-    .metric { padding: .35rem .7rem; border-radius: .75rem; font-size: .78rem; background: var(--surface-strong); color: var(--ink); }
+    .proj-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; margin: .75rem 0; }
+    .metric { padding: .4rem .3rem; border-radius: .7rem; font-size: .7rem; background: var(--surface-strong); color: var(--ink); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .metric strong { color: var(--accent-strong); }
 
     /* ========== 赛场与舞台（精简为 grid 两列布局） ========== */
@@ -559,6 +548,10 @@
     }
     .nav-link.active .nav-dot { background: var(--accent); transform: scale(1.5); }
     @media (max-width: 768px) {
+      #contactFAB { display: none; }
+      /* 移动端关闭毛玻璃特效，保证流畅 */
+      .fluid::before { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+      .proj-card { background: var(--surface) !important; }
       #sideNav {
         left: 0; right: 0; top: auto; bottom: 0; transform: none;
         flex-direction: row; border-radius: 1.2rem 1.2rem 0 0;
@@ -599,12 +592,19 @@
 
     /* ========== 项目无缝循环自动滚动 ========== */
     #projViewport { scroll-behavior: smooth; overflow: hidden; }
-    #projTrack { display: flex; gap: 1.75rem; padding: 0 1rem 2rem; }
+    #projViewport.native-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    /* 移动端自动滚动：默认开启无缝循环 */
+    @media (max-width: 1023px) {
+      #projTrack { animation: projSeamless 20s linear infinite; }
+      #projTrack:hover { animation-play-state: paused; }
+      #projTrack.seamless-scroll-off { animation: none; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    }
+    #projTrack { display: flex; gap: 1.75rem; padding: 0 1rem 2rem; width: max-content; }
     /* 隐藏滚动条：兼容所有主流浏览器 */
     #projTrack::-webkit-scrollbar { display: none; }
     #projTrack { scrollbar-width: none; -ms-overflow-style: none; }
     #projTrack.seamless-scroll {
-      animation: projSeamless 35s linear infinite;
+      animation: projSeamless 18s linear infinite;
     }
     #projTrack.seamless-scroll:hover {
       animation-play-state: paused;
@@ -658,6 +658,10 @@
 
     /* ========== 导航栏响应式：移动端底部水平排列 ========== */
     @media (max-width: 768px) {
+      #contactFAB { display: none; }
+      /* 移动端关闭毛玻璃特效，保证流畅 */
+      .fluid::before { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+      .proj-card { background: var(--surface) !important; }
       #sideNav {
         top: auto;
         bottom: 0;
@@ -703,10 +707,30 @@
         gap: 2rem;
       }
       .about-avatar-wrap { order: -1; }
+      .about-photos-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.5rem !important;
+      }
+      .about-photos-captions {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.5rem !important;
+      }
+      .proj-metrics {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: .3rem !important;
+      }
+      .metric {
+        font-size: .65rem !important;
+        padding: .35rem .2rem !important;
+      }
       .life-grid {
         grid-template-columns: 1fr;
       }
     }
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="./assets/js/gsap.min.js"></script>
+  <script src="./assets/js/ScrollTrigger.min.js"></script>
   </style>
 </head>
 <body>
@@ -721,7 +745,7 @@
   </div>
   <!-- 素材位置：./assets/background/bg-dark.mp4（视频优先） / 2.jpg（静态图兜底） -->
   <div id="bgLayerDark" class="bg-layer" aria-hidden="true">
-    <video class="bg-media" autoplay muted loop playsinline preload="auto" poster="./assets/background/2.jpg">
+    <video class="bg-media" autoplay muted loop playsinline preload="auto" poster="./assets/background/1.jpg">
       <source src="./assets/background/bg-dark.mp4" type="video/mp4">
     </video>
     <img class="bg-media bg-fallback" src="./assets/background/2.jpg" alt="">
@@ -736,15 +760,23 @@
     <a class="nav-link" href="#projects" data-section="projects"><span class="nav-dot"></span>项目作品</a>
     <a class="nav-link" href="#philosophy" data-section="philosophy"><span class="nav-dot"></span>营销理念</a>
     <a class="nav-link" href="#experience" data-section="experience"><span class="nav-dot"></span>实习经历</a>
-    <a class="nav-link" href="#life" data-section="life"><span class="nav-dot"></span>赛场舞台</a>
     <a class="nav-link" href="#skills" data-section="skills"><span class="nav-dot"></span>专业能力</a>
+    <a class="nav-link" href="#life" data-section="life"><span class="nav-dot"></span>赛场舞台</a>
   </nav>
 
   <!-- 右上角：双主题切换按钮 -->
   <button type="button"  id="themeToggle" class="fluid fluid-soft" aria-label="切换主题" title="切换主题">
     <svg class="icon-sun" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-  </button>
+  
+  <!-- 固定联系方式 -->
+  <div id="contactFAB" style="position:fixed;right:1.25rem;top:50%;transform:translateY(-50%);z-index:58;display:flex;flex-direction:column;gap:.5rem">
+    <a href="mailto:zhaomengxi@stu.scu.edu.cn" title="邮箱" style="width:2.5rem;height:2.5rem;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface);backdrop-filter:blur(8px);transition:transform .2s,color .2s;text-decoration:none" onmouseover="this.style.transform='scale(1.15)';this.style.color='var(--accent-strong)'" onmouseout="this.style.transform='scale(1)';this.style.color='var(--ink)'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+    <a href="tel:+8615528498279" title="电话" style="width:2.5rem;height:2.5rem;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface);backdrop-filter:blur(8px);transition:transform .2s,color .2s;text-decoration:none" onmouseover="this.style.transform='scale(1.15)';this.style.color='var(--accent-strong)'" onmouseout="this.style.transform='scale(1)';this.style.color='var(--ink)'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+    <a href="#" title="微信 15528498279" style="width:2.5rem;height:2.5rem;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface);backdrop-filter:blur(8px);transition:transform .2s,color .2s;text-decoration:none" onmouseover="this.style.transform='scale(1.15)';this.style.color='var(--accent-strong)'" onmouseout="this.style.transform='scale(1)';this.style.color='var(--ink)'" onclick="navigator.clipboard.writeText('15528498279');this.style.color='var(--accent-strong)';setTimeout(function(){this.style.color='var(--ink)';}.bind(this),1500);return false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+  </div>
+</button>
+  <span id="themeHint" style="position:fixed;top:1.9rem;right:5rem;white-space:nowrap;font-size:.72rem;color:var(--ink);background:var(--surface-strong);padding:.4rem .75rem;border-radius:999px;backdrop-filter:blur(8px);pointer-events:none;opacity:0;transition:opacity .4s;z-index:61">点击这里刷新后看到不同的我</span>
 
   <!-- 左下角：可收缩音频播放器 -->
   <div id="player">
@@ -770,10 +802,12 @@
       <span class="pulse-ring"></span>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
     </button>
+      <span id="playerHint" style="position:absolute;left:4.2rem;top:.8rem;white-space:nowrap;font-size:.72rem;color:var(--ink);background:var(--surface-strong);padding:.4rem .75rem;border-radius:999px;backdrop-filter:blur(8px);pointer-events:none;opacity:0;transition:opacity .4s;z-index:56">点这里展示歌品！</span>
   </div>
 
 
-  <main>
+    
+  <main class="relative z-10">
     <!-- ========== 1. Hero 首屏 100vh ========== -->
     <section id="hero">
       <!-- 头像区 -->
@@ -795,7 +829,10 @@
           <span class="hero-tag reveal">商务谈判</span>
         </div>
         <p class="hero-slogan reveal">数据驱动决策 · 全域营销增长</p>
-        <p class="hero-summary reveal" style="max-width:640px;margin:1.2rem auto 0;font-size:clamp(.82rem,1.5vw,.95rem);color:var(--ink-soft);line-height:1.75">四川大学市场营销专业在读，拥有京东、实习僧、歪马送酒等多段一线实习经历。擅长数据驱动决策与全域营销增长，熟练运用AI工具赋能商业分析。院篮球队队长、校主持队核心成员，兼具团队领导力与公众表达力。</p>
+        <div class="reveal" style="margin-top:1.2rem">
+        <p style="font-size:clamp(1rem,2vw,1.25rem);font-weight:600;color:var(--ink);letter-spacing:.02em">赵盟熙 ｜ 四川大学市场营销 27届</p>
+        <p style="font-size:clamp(.82rem,1.5vw,.95rem);color:var(--accent-strong);margin-top:.5rem;letter-spacing:.04em">求职意向：市场营销 / 采购管培 / 电商营销 / ToB销售 / 游戏策划</p>
+      </div>
       </div>
 
       <div id="scrollHint">
@@ -807,24 +844,44 @@
     <!-- ========== 2. 个人介绍板块（左右两栏布局） ========== -->
     <section id="about" class="section-pad">
       <div class="max-w-6xl mx-auto px-6">
-        <p class="eyebrow reveal">ABOUT ME</p>
-        <h2 class="section-title reveal">个人介绍</h2>
+        <p class="eyebrow reveal">WHO'S ERROR?</p>
+        <h2 class="section-title reveal">关于 Error</h2>
         <div class="about-layout reveal">
           <!-- 左侧文字介绍 -->
           <div class="about-text">
-            <p>赵盟熙，四川大学市场营销专业（A+评级）2023-2027在读。我是一名以数据驱动决策为核心竞争力的市场营销实践者。</p>
-            <p style="margin-top:1rem">在京东集团3C数码事业群的实习中，独立操盘618大促全链路运营，核心单品同比增长120%；在实习僧期间，从0到1搭建覆盖1500+学生的社群增长体系。</p>
-            <p style="margin-top:1rem">我坚信「全域营销增长」理念——打通直播、社群、投放与线下场景，构建从种草到转化的完整闭环。同时，我熟练运用Claude、Codex等AI工具重构数据分析与商业报告流程，是京东黑客马拉松获奖实践者。</p>
-            <p style="margin-top:1rem">赛场之外，我担任院篮球队队长与校主持队核心成员，累计主持3000+人规模活动5场，兼具团队领导力与公众表达力。</p>
+            <p>没错，你没看错——我叫 <strong style="color:var(--accent-strong)">Error</strong>。不是 404 那个 Error，是“1rror”——像 mirror，一面镜子，时刻反省自己的优缺点。四川大学市场营销（A+）在读，一个相信“看清自己才能看清前路”的营销人。</p>
+            <p style="margin-top:1rem">具备 <strong>3C 数码品类采销运营、直播电商、B 端营销</strong>的全链路实操经验。京东实习期间独立统筹 <strong>32 场采销直播</strong>，累计 GMV 破百万；主导大型展会配件营销方案与新商拓展项目，推动品类曝光与供给端突破。</p>
+            <p style="margin-top:1rem">秉持<strong>数据驱动</strong>的工作逻辑，擅长在资源有限的场景下整合跨方资源、快速推进项目落地。具备强目标感、owner 意识与抗压能力，能够适配互联网快节奏的业务迭代节奏。</p>
+            <p style="margin-top:1rem">对电商与 3C 数码赛道有持续观察与独立思考，期望深耕业务一线，持续为业务增长输出价值。熟练运用 Claude、Codex 等 AI 工具与 Python、SPSS、SQL 进行数据分析与经营决策。</p>
           </div>
           <!-- 右侧头像照片（跟随主题切换） -->
           <div class="about-avatar-wrap">
             <div class="about-avatar-container">
               <div class="about-avatar-halo"></div>
               <!-- 素材位置：./assets/avatar/avatar-light.png（光明主题头像） -->
-              <img id="aboutAvatarLight" class="about-avatar-img" src="./assets/avatar/avatar-light.png" alt="赵盟熙头像" onerror="this.style.display='none'" style="z-index:1">
+              <img id="aboutAvatarLight" class="about-avatar-img" src="./assets/avatar/avatar-light.png" alt="Error 头像" onerror="this.style.display='none'" style="z-index:1">
               <!-- 素材位置：./assets/avatar/avatar-dark.png（黑暗主题头像） -->
-              <img id="aboutAvatarDark" class="about-avatar-img" src="./assets/avatar/avatar-dark.png" alt="赵盟熙头像" onerror="this.style.display='none'" style="z-index:2;opacity:0">
+              <img id="aboutAvatarDark" class="about-avatar-img" src="./assets/avatar/avatar-dark.png" alt="Error 头像" onerror="this.style.display='none'" style="z-index:2;opacity:0">
+            </div>
+          </div>
+        </div>
+        <!-- 个人照 -->
+        <div class="reveal mt-10">
+          <p class="text-xs tracking-widest uppercase mb-5" style="color:var(--accent);letter-spacing:.12em">SNAPSHOTS</p>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem">
+            <div>
+              <div style="border-radius:1.25rem;overflow:hidden;background:var(--surface);cursor:pointer" data-lb="about" data-idx="0">
+                <img src="./assets/about/about-live.jpg" width="400" height="300" alt="京东直播" onerror="this.style.display='none'" style="width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .7s ease;display:block" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+                <div class="img-fallback">京东直播照</div>
+              </div>
+              <p style="font-size:.75rem;color:var(--ink-soft);text-align:center;margin-top:.5rem">京东 · C3 直播现场</p>
+            </div>
+            <div>
+              <div style="border-radius:1.25rem;overflow:hidden;background:var(--surface);cursor:pointer" data-lb="about" data-idx="1">
+                <img src="./assets/about/about-travel.jpg" width="400" height="300" alt="旅行照" onerror="this.style.display='none'" style="width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .7s ease;display:block" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+                <div class="img-fallback">旅行照</div>
+              </div>
+              <p style="font-size:.75rem;color:var(--ink-soft);text-align:center;margin-top:.5rem">读万卷书，行万里路</p>
             </div>
           </div>
         </div>
@@ -843,14 +900,14 @@
             <div class="stat-sub">京东 · 3C 数码配件业务部</div>
           </div>
           <div class="stat fluid fluid-strong rounded-[2rem] px-6 py-10 text-center reveal">
-            <div class="stat-num" data-target="400" data-suffix="万+">0</div>
-            <div class="stat-label">4 个月直播累计 GMV</div>
-            <div class="stat-sub">转化率 CVR 稳定 3.5%+</div>
+            <div class="stat-num" data-target="150" data-suffix="万">0</div>
+            <div class="stat-label">3 个月直播累计 GMV</div>
+            <div class="stat-sub">成交 2,853 单 · CVR 稳定 3.5%+</div>
           </div>
           <div class="stat fluid fluid-strong rounded-[2rem] px-6 py-10 text-center reveal">
-            <div class="stat-num" data-target="2000" data-suffix="万+">0</div>
+            <div class="stat-num" data-target="2000" data-suffix="万">0</div>
             <div class="stat-label">众筹 AI 新品微博话题曝光</div>
-            <div class="stat-sub">Motvox 消音口罩 · 首日破 500 单</div>
+            <div class="stat-sub">618 零售创新奖 · 首日破 500 单</div>
           </div>
           <div class="stat fluid fluid-strong rounded-[2rem] px-6 py-10 text-center reveal">
             <div class="stat-num" data-target="85" data-suffix="%">0</div>
@@ -869,7 +926,7 @@
       <div id="projViewport">
         <div id="projTrack">
           <!-- Project 1 -->
-          <article class="proj-card fluid">
+          <article class="proj-card fluid-soft">
             <div class="proj-visual" data-lb="p1" data-idx="0" data-proj="p1">
               <img src="./assets/projects/project-1-1.jpg" alt="京东 618 大促全链路操盘" onerror="this.style.display='none'">
               <div class="img-fallback">项目封面待替换<br>./assets/projects/project-1-1.jpg</div>
@@ -880,15 +937,15 @@
             <h3 class="text-xl font-semibold mb-1">京东 · 618 大促全链路操盘</h3>
             <p class="text-sm opacity-70 mb-1">2026.03 – 2026.08 · 3C 数码事业群</p>
             <div class="proj-metrics">
-              <span class="metric"><strong>+120%</strong> 核心单品同比</span>
-              <span class="metric"><strong>-12%</strong> 库存周转天数</span>
-              <span class="metric"><strong>+5%</strong> 类目利润同比</span>
+              <span class="metric"><strong>120%</strong> 核心单品同比</span>
+              <span class="metric"><strong>12%↓</strong> 库存周转</span>
+              <span class="metric"><strong>150万</strong> 直播GMV</span>
             </div>
             <p class="text-sm text-[var(--ink-soft)] leading-relaxed">独立操盘自营及 POP 店铺全链路运营，主导合同谈判与毛保策略；618 大促期间以 AI 工具驱动货盘管理与供应链优化，决策效率提升 30%。</p>
           </article>
 
           <!-- Project 2 -->
-          <article class="proj-card fluid">
+          <article class="proj-card fluid-soft">
             <div class="proj-visual" data-lb="p2" data-idx="0" data-proj="p2">
               <img src="./assets/projects/project-2-1.jpg" alt="京东众筹 101 AIdol" onerror="this.style.display='none'">
               <div class="img-fallback">项目封面待替换<br>./assets/projects/project-2-1.jpg</div>
@@ -901,14 +958,14 @@
             <p class="text-sm opacity-70 mb-1">2026 · AI 配件供应链壁垒</p>
             <div class="proj-metrics">
               <span class="metric"><strong>500+</strong> 首日订单</span>
-              <span class="metric"><strong>2000万+</strong> 微博话题曝光</span>
-              <span class="metric"><strong>20+</strong> 新商入驻自营</span>
+              <span class="metric"><strong>2000万</strong> 话题曝光</span>
+              <span class="metric"><strong>20+</strong> 新商入驻</span>
             </div>
             <p class="text-sm text-[var(--ink-soft)] leading-relaxed">全权操盘京东众筹 AI 项目，孵化 Motvox 消音口罩；主动建联 100+ 新商，扩充品类新供给 25%，联动华为、荣耀、佳能绑赠，单月带动 2 万台销售。</p>
           </article>
 
           <!-- Project 3 -->
-          <article class="proj-card fluid">
+          <article class="proj-card fluid-soft">
             <div class="proj-visual" data-lb="p3" data-idx="0" data-proj="p3">
               <img src="./assets/projects/project-3-1.jpg" alt="跨境抖店独立运营 泰国市场" onerror="this.style.display='none'">
               <div class="img-fallback">项目封面待替换<br>./assets/projects/project-3-1.jpg</div>
@@ -920,15 +977,15 @@
             <h3 class="text-xl font-semibold mb-1">跨境抖店独立运营 · 泰国市场</h3>
             <p class="text-sm opacity-70 mb-1">2024.01 – 2024.12 · 国内/跨境抖店</p>
             <div class="proj-metrics">
-              <span class="metric"><strong>+30%</strong> 日均订单量</span>
-              <span class="metric"><strong>+40%</strong> 销售额</span>
-              <span class="metric"><strong>-15%</strong> 转化成本</span>
+              <span class="metric"><strong>30%</strong> 日均订单量</span>
+              <span class="metric"><strong>40%</strong> 销售额</span>
+              <span class="metric"><strong>15%↓</strong> 转化成本</span>
             </div>
             <p class="text-sm text-[var(--ink-soft)] leading-relaxed">负责 120+ SKU 选品上架与主图详情页优化；巨量千川 A/B 测试提升投放效率 20%；基于 Shopee 大数据洞察消费趋势，结合大促节点策划营销。</p>
           </article>
 
           <!-- Project 4 -->
-          <article class="proj-card fluid">
+          <article class="proj-card fluid-soft">
             <div class="proj-visual" data-lb="p4" data-idx="0" data-proj="p4">
               <img src="./assets/projects/project-4-1.jpg" alt="五酿品牌营销策划" onerror="this.style.display='none'">
               <div class="img-fallback">项目封面待替换<br>./assets/projects/project-4-1.jpg</div>
@@ -940,8 +997,8 @@
             <h3 class="text-xl font-semibold mb-1">五酿品牌营销策划</h3>
             <p class="text-sm opacity-70 mb-1">2025.09 – 2025.11</p>
             <div class="proj-metrics">
-              <span class="metric"><strong>采纳落地</strong> 策划案</span>
-              <span class="metric"><strong>主笔</strong> 市场分析与核心策略</span>
+              <span class="metric"><strong>采纳</strong> 落地策划案</span>
+              <span class="metric"><strong>主笔</strong> 市场分析</span>
               <span class="metric"><strong>定位</strong> 五粮藏五酿</span>
             </div>
             <p class="text-sm text-[var(--ink-soft)] leading-relaxed">主导前期市场与竞品分析，通过问卷与案头研究精准定位「五粮藏五酿」核心方向，策划方案成功获得客户采纳并落地。</p>
@@ -961,7 +1018,7 @@
           <div class="phi-block fluid md:mr-[8%] reveal">
             <div class="phi-num">01</div>
             <h3 class="phi-title">数据驱动决策</h3>
-            <p class="phi-text">从 GMV 拆解到转化漏斗，用数据定位问题、验证策略，让每一次决策都有据可依，而不是拍脑袋。</p>
+            <p class="phi-text">从 GMV 拆解到转化漏斗，结合 Python、SPSS、SQL 与 AI 工具进行数据分析，用数据定位问题、验证策略，让每一次决策都有据可依。</p>
           </div>
           <div class="phi-block fluid md:ml-[12%] reveal">
             <div class="phi-num">02</div>
@@ -971,7 +1028,7 @@
           <div class="phi-block fluid md:mr-[4%] reveal">
             <div class="phi-num">03</div>
             <h3 class="phi-title">AI 原生工作流</h3>
-            <p class="phi-text">熟练运用 Claude、Codex 等 AI 工具重构数据分析、商业报告与决策流程，京东黑客马拉松获奖实践者。</p>
+            <p class="phi-text">熟练运用 Claude、Codex 等 AI 工具开展数据分析、商业报告撰写及工作流提效，掌握 Python、SPSS、EViews 及 SQL 基础，紧跟 AI 时代节奏。</p>
           </div>
           <div class="phi-block fluid md:ml-[8%] reveal">
             <div class="phi-num">04</div>
@@ -994,9 +1051,9 @@
               <span class="exp-period">2026.03 – 2026.08</span>
             </div>
             <ul class="exp-list">
-              <li>自营 + POP 店铺全链路运营，主导合同谈判与毛保策略，影棚器材/麦克风类目利润同比增长 5%。</li>
-              <li>操盘 618 大促营销，核心单品同比增长 120%；直播业务 4 个月累计 GMV 400 万，CVR 稳定 3.5%+。</li>
-              <li>AI 驱动供应链优化，库存周转天数缩短 12%，货盘管理决策效率提升 30%。</li>
+              <li>自营 + POP 店铺全链路运营，主导合同谈判与毛保策略，深度参与 PE 展和线下超体联合营销策划与运营，KA 招商 30W，整合线上线下流量。</li>
+              <li>操盘 618 大促营销，核心单品同比增长 120%；主理C3部门直播业务，3个月累计 GMV 150 万，成交 2,853 单，商卡曝光 70W+ 次，CVR 稳定 3.5%+。</li>
+              <li>主动触达100余家AI类/影棚类新商，70余家建立合作，沉淀14家新潜力商家；全权操盘京东众筹「101 AIdol」项目，联动华为、荣耀、佳能绑赠，获618零售创新奖，单月带动2万台销售。</li>
             </ul>
           </div>
 
@@ -1039,7 +1096,30 @@
       </div>
     </section>
 
-    <!-- ========== 7. 赛场与舞台（精简为2张图片 grid 两列布局） ========== -->
+    <!-- ========== 7. 专业能力可视化 ========== -->
+    <section id="skills" class="section-pad">
+      <div class="max-w-6xl mx-auto px-6">
+        <p class="eyebrow reveal">CAPABILITIES</p>
+        <h2 class="section-title reveal">专业能力</h2>
+        <div class="flex flex-col gap-8">
+          <div class="chart-card fluid reveal">
+            <h3 class="chart-title">营销能力雷达</h3>
+            <p class="chart-desc">六维能力模型：市场策划、数据分析、商务谈判、AI 工具、全域运营、内容营销</p>
+            <div class="w-full mx-auto" style="aspect-ratio:1/1;max-height:70vh">
+              <canvas id="radarChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card fluid reveal">
+            <h3 class="chart-title">数据增长成果</h3>
+            <p class="chart-desc">过往项目中的关键指标提升幅度（%）</p>
+            <div class="w-full mx-auto" style="aspect-ratio:5/3;max-height:60vh">
+              <canvas id="barChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ========== 8. 赛场与舞台（精简为2张图片 grid 两列布局） ========== -->
     <section id="life" class="section-pad">
       <div class="max-w-6xl mx-auto px-6 mb-6">
         <p class="eyebrow reveal">BEYOND WORK</p>
@@ -1068,29 +1148,8 @@
       </div>
     </section>
 
-    <!-- ========== 8. 专业能力可视化 ========== -->
-    <section id="skills" class="section-pad">
-      <div class="max-w-6xl mx-auto px-6">
-        <p class="eyebrow reveal">CAPABILITIES</p>
-        <h2 class="section-title reveal">专业能力</h2>
-        <div class="flex flex-col gap-8">
-          <div class="chart-card fluid reveal">
-            <h3 class="chart-title">营销能力雷达</h3>
-            <p class="chart-desc">六维能力模型：市场策划、数据分析、商务谈判、AI 工具、全域运营、内容营销</p>
-            <div class="w-full mx-auto" style="aspect-ratio:1/1;max-height:70vh">
-              <canvas id="radarChart"></canvas>
-            </div>
-          </div>
-          <div class="chart-card fluid reveal">
-            <h3 class="chart-title">数据增长成果</h3>
-            <p class="chart-desc">过往项目中的关键指标提升幅度（%）</p>
-            <div class="w-full mx-auto" style="aspect-ratio:5/3;max-height:60vh">
-              <canvas id="barChart"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    
+
     <!-- ========== 9. 页脚联系区 ========== -->
     <footer id="contact" class="section-pad pb-10">
       <div class="max-w-4xl mx-auto px-6">
@@ -1118,8 +1177,9 @@
         </div>
       </div>
     </footer>
-  </main>
 
+  
+  </main>
 
   <!-- ========== 项目详情弹窗 ========== -->
   <div id="projModal" aria-hidden="true">
@@ -1222,6 +1282,13 @@
           // 背景层用 CSS 控制可见性，不依赖 GSAP
           document.getElementById('bgLayerLight').style.opacity = theme==='light' ? '1' : '0';
           document.getElementById('bgLayerDark').style.opacity = theme==='dark' ? '1' : '0';
+          // 切换后强制重载当前主题的视频
+          var id = theme==='light'?'bgLayerLight':'bgLayerDark';
+          var activeBg = document.getElementById(id);
+          if (activeBg) {
+            var v = activeBg.querySelector('video');
+            if (v) { v.muted = true; v.currentTime = 0; v.load(); setTimeout(function(){ v.play().catch(function(){}); }, 100); }
+          }
           gsap.to('#avatarLight',  {autoAlpha: theme==='light'?1:0, scale: theme==='light'?1:0.94, duration:.9, ease:'power2.out'});
           gsap.to('#avatarDark',   {autoAlpha: theme==='dark'?1:0,  scale: theme==='dark'?1:0.94,  duration:.9, ease:'power2.out'});
           gsap.to('#aboutAvatarLight', {autoAlpha: theme==='light'?1:0, scale: theme==='light'?1:0.94, duration:.9, ease:'power2.out'});
@@ -1287,7 +1354,7 @@
           const accentStrong = cssVar('--accent-strong', '#a8d4f0');
           const inkText = cssVar('--ink-soft', 'rgba(255,255,255,.7)');
           // 减小雷达图边距，让图表在Canvas内占满更多面积
-          const cx=w/2, cy=h/2+4, R=Math.min(w,h)/2-10, N=RADAR.labels.length;
+          const cx=w/2, cy=h/2, R=Math.min(w,h)/2-28, N=RADAR.labels.length;
           const pt = (i,r)=>{ const a=-Math.PI/2 + i*2*Math.PI/N; return [cx+Math.cos(a)*r, cy+Math.sin(a)*r]; };
           ctx.lineJoin = 'round';
           for (let ring=4; ring>=1; ring--){
@@ -1310,10 +1377,10 @@
             ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2);
             ctx.fillStyle = accentStrong; ctx.globalAlpha=.9; ctx.shadowColor=accent; ctx.shadowBlur=10; ctx.fill(); ctx.shadowBlur=0;
           });
-          ctx.font = '12px "PingFang SC","Microsoft YaHei",sans-serif';
+          ctx.font = (w < 400 ? '10px' : '12px') + ' "PingFang SC","Microsoft YaHei",sans-serif';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = inkText; ctx.globalAlpha = .9;
           // 标签离图表更近，让雷达图在Canvas内占满更多面积
-          RADAR.labels.forEach((lb,i)=>{ const [x,y]=pt(i, R+18); ctx.fillText(lb,x,y); });
+          RADAR.labels.forEach((lb,i)=>{ const [x,y]=pt(i, R+22); ctx.fillText(lb,x,y); });
         }
         function roundRectTop(ctx, x, y, w, h, r){
           r = Math.min(r, w/2, h); ctx.beginPath(); ctx.moveTo(x+r, y);
@@ -1341,11 +1408,11 @@
             grad.addColorStop(0, accentStrong); grad.addColorStop(1, accent);
             roundRectTop(ctx, x, y, bw, bh, Math.min(10, bw/2, bh));
             ctx.fillStyle = grad; ctx.globalAlpha = .8; ctx.shadowColor=accent; ctx.shadowBlur=10; ctx.fill(); ctx.shadowBlur=0;
-            ctx.font = '600 13px "PingFang SC","Microsoft YaHei",sans-serif';
+            ctx.font = (w < 400 ? '600 10px' : '600 13px') + ' "PingFang SC","Microsoft YaHei",sans-serif';
             ctx.fillStyle = inkText; ctx.globalAlpha = .95; ctx.textAlign = 'center';
             // 数值标签离柱顶更近
-            ctx.fillText('+'+b.value+'%', x+bw/2, y-8);
-            ctx.font = '11px "PingFang SC","Microsoft YaHei",sans-serif';
+            ctx.fillText(b.value+'%', x+bw/2, y-8);
+            ctx.font = (w < 400 ? '9px' : '11px') + ' "PingFang SC","Microsoft YaHei",sans-serif';
             ctx.globalAlpha = .75; ctx.fillText(b.label, x+bw/2, h-padB+16);
           });
         }
@@ -1425,7 +1492,7 @@
       function initSideNav(){
         var nav = $('#sideNav'); if (!nav) return;
         var links = $$('.nav-link', nav);
-        var ids = ['hero','about','stats','projects','philosophy','experience','life','skills'];
+        var ids = ['hero','about','stats','projects','philosophy','experience','skills','life'];
         var secs = ids.map(function(id){ return $('#'+id); }).filter(Boolean);
         function chk(){
           var h = $('#hero'); if(!h) return;
@@ -1461,7 +1528,7 @@
         var closeBtn = modal.querySelector('.proj-modal-close');
         var modalImg = document.getElementById('projModalImg');
         var modalBody = document.getElementById('projModalBody');
-        var projData = {'p1': {'title': '京东 · 618 大促全链路操盘', 'period': '2026.03 – 2026.08 · 3C 数码事业群', 'tags': '电商运营、商务谈判、AI 供应链', 'metrics': '+120% 核心单品同比 / -12% 库存周转天数 / +5% 类目利润同比', 'desc': '独立操盘自营及 POP 店铺全链路运营，主导合同谈判与毛保策略；618 大促期间以 AI 工具驱动货盘管理与供应链优化，决策效率提升 30%。'}, 'p2': {'title': '京东众筹「101 AIdol」· AI 硬件孵化', 'period': '2026 · AI 配件供应链壁垒', 'tags': '新品孵化、招商建联、整合营销', 'metrics': '500+ 首日订单 / 2000万+ 微博话题曝光 / 20+ 新商入驻自营', 'desc': '全权操盘京东众筹 AI 项目，孵化 Motvox 消音口罩；主动建联 100+ 新商，扩充品类新供给 25%，联动华为、荣耀、佳能绑赠，单月带动 2 万台销售。'}, 'p3': {'title': '跨境抖店独立运营 · 泰国市场', 'period': '2024.01 – 2024.12 · 国内/跨境抖店', 'tags': '跨境电商、千川投放、选品策略', 'metrics': '+30% 日均订单量 / +40% 销售额 / -15% 转化成本', 'desc': '负责 120+ SKU 选品上架与主图详情页优化；巨量千川 A/B 测试提升投放效率 20%；基于 Shopee 大数据洞察消费趋势，结合大促节点策划营销。'}, 'p4': {'title': '五酿品牌营销策划', 'period': '2025.09 – 2025.11', 'tags': '市场调研、品牌策略、方案落地', 'metrics': '采纳落地策划案 / 主笔市场分析与核心策略 / 定位五粮藏五酿', 'desc': '主导前期市场与竞品分析，通过问卷与案头研究精准定位「五粮藏五酿」核心方向，策划方案成功获得客户采纳并落地。'}};
+        var projData = {'p1': {'title': '京东 · 618 大促全链路操盘', 'period': '2026.03 – 2026.08 · 3C 数码事业群 · 618零售创新奖', 'tags': '电商运营、商务谈判、AI 供应链', 'metrics': '+120% 核心单品同比 / 3月 GMV 150万 / CVR 3.5%+ / 618 零售创新奖', 'desc': '独立操盘自萩&POP店铺全链路运营，主导合同谈判与毛保策略；618大促期间以AI工具驱动货盘管理与供应链优化；主理C3直播业务，3月GMV 150万成交2,853单；深度参与PE展和线下超体联合营销，KA招商30W。'}, 'p2': {'title': '京东众筹「101 AIdol」· AI 硬件孵化', 'period': '2026 · AI 配件供应链壁垒', 'tags': '新品孵化、招商建联、整合营销', 'metrics': '500+ 首日订单 / 2000万 微博话题曝光 / 20+ 新商入驻自营', 'desc': '全权操盘京东众筹「101 AIdol」AI项目，孵化Motvox消音口罩；主动建联100+新商，70余家建立合作，沉淀14家新潜力商家；联动华为、荣耀、佳能绑赠，获618零售创新奖，单月带动2万台销售。'}, 'p3': {'title': '跨境抖店独立运营 · 泰国市场', 'period': '2024.01 – 2024.12 · 国内/跨境抖店', 'tags': '跨境电商、千川投放、选品策略', 'metrics': '+30% 日均订单量 / +40% 销售额 / -15% 转化成本', 'desc': '负责 120+ SKU 选品上架与主图详情页优化；巨量千川 A/B 测试提升投放效率 20%；基于 Shopee 大数据洞察消费趋势，结合大促节点策划营销。'}, 'p4': {'title': '五酿品牌营销策划', 'period': '2025.09 – 2025.11', 'tags': '市场调研、品牌策略、方案落地', 'metrics': '采纳落地策划案 / 主笔市场分析与核心策略 / 定位五粮藏五酿', 'desc': '主导前期市场与竞品分析，通过问卷与案头研究精准定位「五粮藏五酿」核心方向，策划方案成功获得客户采纳并落地。'}};
 
         function open(pid){
           var d = projData[pid]; if (!d) return;
@@ -1549,11 +1616,27 @@
       /* ========== 滚动Reveal动画 ========== */
       function initReveal(){
         if (!hasGsap || reduceMotion) return;
-        gsap.set('.reveal', {autoAlpha:0, y:40});
+        // Content elements: dramatic stagger with big lift + scale
+        gsap.set('.reveal', {autoAlpha:0, y:72, scale:0.9});
         ScrollTrigger.batch('.reveal', {
-          start: 'top 88%',
-          onEnter: function(els){ gsap.to(els, {autoAlpha:1, y:0, duration:.9, stagger:.1, ease:'power3.out', overwrite:true}); },
+          start: 'top 78%',
+          onEnter: function(els){ gsap.to(els, {autoAlpha:1, y:0, scale:1, duration:.85, stagger:.15, ease:'power4.out', overwrite:true}); },
           once: true
+        });
+        // Section-level cut-in: each section blurs in + scales up from below
+        var secs = document.querySelectorAll('.section-pad');
+        secs.forEach(function(sec, i){
+          ScrollTrigger.create({
+            trigger: sec,
+            start: 'top 85%',
+            onEnter: function(){
+              gsap.fromTo(sec,
+                {autoAlpha:0.15, y:80, scale:0.88, filter:'blur(6px)'},
+                {autoAlpha:1, y:0, scale:1, filter:'blur(0px)', duration:1, ease:'power3.out'}
+              );
+            },
+            once: true
+          });
         });
       }
 
@@ -1692,11 +1775,18 @@
             window.AudioPlayer.play();
           }
         }
-        setTimeout(doPlay, 500);
-        ['click','touchstart','keydown','pointerdown'].forEach(function(evt){
+        // Try immediate autoplay (may be blocked, caught by event listener fallback)
+        setTimeout(doPlay, 300);
+        // Also try after a short delay when page is fully interactive
+        if (document.readyState === 'complete') {
+          setTimeout(doPlay, 500);
+        } else {
+          window.addEventListener('load', function(){ setTimeout(doPlay, 500); }, { once: true });
+        }
+        ['click','touchstart','keydown','pointerdown','scroll'].forEach(function(evt){
           document.addEventListener(evt, doPlay, { once: true, passive: true });
         });
-      })();;
+      })();
 
       /* ========== Lightbox 图片弹窗 ========== */
       const Lightbox = (function(){
@@ -1763,6 +1853,16 @@
         else { aboutLight.style.opacity = '1'; aboutDark.style.opacity = '0'; }
       }
 
+      (function(){
+        var t = document.getElementById('themeHint');
+        var p = document.getElementById('playerHint');
+        if (!t || !p) return;
+        setTimeout(function(){ t.style.opacity = '1'; p.style.opacity = '1'; }, 1500);
+        setTimeout(function(){ t.style.opacity = '0'; p.style.opacity = '0'; }, 7500);
+        document.getElementById('themeToggle').addEventListener('click', function(){ t.style.opacity = '0'; }, {once: true});
+        document.getElementById('playerFab').addEventListener('click', function(){ p.style.opacity = '0'; }, {once: true});
+        window.addEventListener('scroll', function(){ t.style.opacity = '0'; p.style.opacity = '0'; }, {once: true});
+      })();
       initHero();
       initSideNav();
       initProjModal();
