@@ -731,6 +731,10 @@
   <!-- GSAP + ScrollTrigger -->
   <script src="./assets/js/gsap.min.js"></script>
   <script src="./assets/js/ScrollTrigger.min.js"></script>
+
+    /* reveal元素默认可见，GSAP加载后才隐藏并动画 */
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .gsap-ready .reveal { opacity: 0; transform: translateY(72px) scale(0.9); }
   </style>
 </head>
 <body>
@@ -1872,6 +1876,7 @@
       })();
       // Mark page as GSAP-ready for animations
       document.documentElement.classList.add('gsap-ready');
+      document.documentElement.classList.add("gsap-ready");
       initHero();
       initSideNav();
       initProjModal();
