@@ -654,7 +654,7 @@
     }
 
     /* 没有 GSAP 时直接显示全部内容 */
-    .no-gsap .reveal { opacity: 1 !important; transform: none !important; }
+    
 
     /* ========== 导航栏响应式：移动端底部水平排列 ========== */
     @media (max-width: 768px) {
@@ -1447,20 +1447,27 @@
 
       /* ========== 数字滚动统计 ========== */
       function initCounters(){
-        $$('.stat-num').forEach(function(el){
-          const target = parseFloat(el.dataset.target) || 0;
-          const suffix = el.dataset.suffix || '';
-          function run(){
-            if (hasGsap){
-              const o = {v:0};
-              gsap.to(o, {v:target, duration:1.6, ease:'power2.out', onUpdate:()=>{ el.textContent = Math.round(o.v) + suffix; }});
-            } else { el.textContent = target + suffix; }
-          }
-          if (hasGsap){
-            ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: run });
-          } else { run(); }
+        // 立即显示最终数值，不等 JS
+        ('.stat-num').forEach(function(el){
+          var target = parseFloat(el.dataset.target) || 0;
+          var suffix = el.dataset.suffix || '';
+          el.textContent = target + suffix;
         });
+        // GSAP 可用时再做动画增强
+        if (hasGsap && !reduceMotion){
+          ('.stat-num').forEach(function(el){
+            var target = parseFloat(el.dataset.target) || 0;
+            var suffix = el.dataset.suffix || '';
+            el.textContent = '0';
+            function run(){
+              var o = {v:0};
+              gsap.to(o, {v:target, duration:1.4, ease:'power2.out', onUpdate:function(){ el.textContent = Math.round(o.v) + suffix; }});
+            }
+            ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: run });
+          });
+        }
       }
+
 
       /* ========== 项目横向滚动（桌面 GSAP pin + 移动 overflow-x） ========== */
       function initProjectsScroll(){
@@ -1863,6 +1870,8 @@
         document.getElementById('playerFab').addEventListener('click', function(){ p.style.opacity = '0'; }, {once: true});
         window.addEventListener('scroll', function(){ t.style.opacity = '0'; p.style.opacity = '0'; }, {once: true});
       })();
+      // Mark page as GSAP-ready for animations
+      document.documentElement.classList.add('gsap-ready');
       initHero();
       initSideNav();
       initProjModal();
